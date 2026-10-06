@@ -7,4 +7,4 @@ resources:
   - ingress.yaml
 images:
   - name: ghcr.io/matthewtaylor1995/cafcnews
-    newTag: b5413f58dc92ef86b501c7c3c2c78f76f756c04ea84e2ce30a4e47847f686593
+    newTag: b8507ce8ec3d05b373845c1cdfa9d36906738707477f8fed0ff04e8f4ef65f8f
