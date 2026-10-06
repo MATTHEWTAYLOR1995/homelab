@@ -6,7 +6,7 @@ on:
     # Only rebuild when the site code (or this workflow) changes. Without this,
     # bumping the image tag in apps/charlton/ would trigger another build.
     paths:
-      - "cafcnews/**"
+      - "apps/charlton/cafcnews/**"
       - ".github/workflows/build.yml"
   workflow_dispatch:
  
@@ -30,7 +30,6 @@ jobs:
  
       - uses: docker/build-push-action@v6
         with:
-          # the site (Dockerfile, package.json, server.js) lives in this subfolder
           context: ./apps/charlton/cafcnews
           push: true
           platforms: linux/amd64
