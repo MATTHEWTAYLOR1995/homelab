@@ -23,7 +23,7 @@
       "opponent": "Cheltenham Town",
       "ground": "Completely-Suzuki Stadium",
       "round": "Round 1",
-      "tbcTime": false,
+      "tbcTime": true,
       "homeScore": 1,
       "awayScore": 3
     },
@@ -59,7 +59,7 @@
       "opponent": "Tottenham Hotspur",
       "ground": "The Valley",
       "round": "Round 2",
-      "tbcTime": false,
+      "tbcTime": true,
       "homeScore": 5,
       "awayScore": 1
     },
@@ -143,7 +143,7 @@
       "kickoff": "12:30",
       "ground": "",
       "round": "Matchday 9",
-      "tbcTime": false,
+      "tbcTime": true,
       "homeScore": null,
       "awayScore": null
     },
@@ -155,7 +155,7 @@
       "kickoff": "19:45",
       "ground": "",
       "round": "Matchday 10",
-      "tbcTime": false,
+      "tbcTime": true,
       "homeScore": null,
       "awayScore": null
     },
@@ -167,7 +167,7 @@
       "kickoff": "12:30",
       "ground": "",
       "round": "Matchday 11",
-      "tbcTime": false,
+      "tbcTime": true,
       "homeScore": null,
       "awayScore": null
     },
@@ -179,7 +179,7 @@
       "kickoff": "12:30",
       "ground": "",
       "round": "Matchday 12",
-      "tbcTime": false,
+      "tbcTime": true,
       "homeScore": null,
       "awayScore": null
     },
@@ -191,7 +191,7 @@
       "kickoff": "15:00",
       "ground": "",
       "round": "Matchday 13",
-      "tbcTime": false,
+      "tbcTime": true,
       "homeScore": null,
       "awayScore": null
     },
@@ -203,7 +203,7 @@
       "kickoff": "19:45",
       "ground": "",
       "round": "Matchday 14",
-      "tbcTime": false,
+      "tbcTime": true,
       "homeScore": null,
       "awayScore": null
     },
@@ -215,7 +215,7 @@
       "kickoff": "15:00",
       "ground": "",
       "round": "Matchday 15",
-      "tbcTime": false,
+      "tbcTime": true,
       "homeScore": null,
       "awayScore": null
     },
@@ -227,7 +227,7 @@
       "kickoff": "15:00",
       "ground": "",
       "round": "Matchday 16",
-      "tbcTime": false,
+      "tbcTime": true,
       "homeScore": null,
       "awayScore": null
     },
@@ -239,7 +239,7 @@
       "kickoff": "19:45",
       "ground": "",
       "round": "Matchday 17",
-      "tbcTime": false,
+      "tbcTime": true,
       "homeScore": null,
       "awayScore": null
     },
@@ -251,7 +251,7 @@
       "kickoff": "12:30",
       "ground": "",
       "round": "Matchday 18",
-      "tbcTime": false,
+      "tbcTime": true,
       "homeScore": null,
       "awayScore": null
     },
@@ -263,7 +263,7 @@
       "kickoff": "15:00",
       "ground": "",
       "round": "Matchday 19",
-      "tbcTime": false,
+      "tbcTime": true,
       "homeScore": null,
       "awayScore": null
     },
@@ -275,7 +275,7 @@
       "kickoff": "19:45",
       "ground": "",
       "round": "Matchday 20",
-      "tbcTime": false,
+      "tbcTime": true,
       "homeScore": null,
       "awayScore": null
     },
@@ -287,7 +287,7 @@
       "kickoff": "15:00",
       "ground": "",
       "round": "Matchday 21",
-      "tbcTime": false,
+      "tbcTime": true,
       "homeScore": null,
       "awayScore": null
     },
@@ -299,7 +299,7 @@
       "kickoff": "12:30",
       "ground": "",
       "round": "Matchday 22",
-      "tbcTime": false,
+      "tbcTime": true,
       "homeScore": null,
       "awayScore": null
     },
@@ -311,7 +311,7 @@
       "kickoff": "15:00",
       "ground": "",
       "round": "Matchday 23",
-      "tbcTime": false,
+      "tbcTime": true,
       "homeScore": null,
       "awayScore": null
     },
@@ -323,7 +323,7 @@
       "kickoff": "19:45",
       "ground": "",
       "round": "Matchday 24",
-      "tbcTime": false,
+      "tbcTime": true,
       "homeScore": null,
       "awayScore": null
     },
@@ -335,7 +335,7 @@
       "kickoff": "15:00",
       "ground": "",
       "round": "Matchday 25",
-      "tbcTime": false,
+      "tbcTime": true,
       "homeScore": null,
       "awayScore": null
     },
