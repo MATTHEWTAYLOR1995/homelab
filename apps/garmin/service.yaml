@@ -1,9 +1,13 @@
 apiVersion: v1
-kind: PersistentVolumeClaim
+kind: Service
 metadata:
-  name: garmin-data
+  name: garmin
+  namespace: garmin
 spec:
-  accessModes: [ReadWriteOnce]
-  resources:
-    requests:
-      storage: 1Gi
+  selector:
+    app: garmin
+  ports:
+    - name: http
+      port: 80
+      targetPort: 5000
+  type: ClusterIP

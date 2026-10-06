@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: garmin
+  namespace: garmin
 spec:
   # One replica on purpose: the app writes data/transfers-rumours.json to its own
   # disk, so two pods would each hold a different copy. Those writes are lost when
@@ -15,6 +16,17 @@ spec:
       labels:
         app: garmin
     spec:
+      automountServiceAccountToken: false
+      initContainers:
+        - name: seed-data
+          image: ghcr.io/matthewtaylor1995/garmin
+          command:
+            - sh
+            - -c
+            - test -f /seed/snapshot_seed.json || cp /app/data/snapshot_seed.json /seed/snapshot_seed.json
+          volumeMounts:
+            - name: data
+              mountPath: /seed
       containers:
         - name: web
           image: ghcr.io/matthewtaylor1995/garmin
@@ -24,22 +36,15 @@ spec:
             - name: PORT
               value: "5000"
             - name: GARMIN_EMAIL_FILE
-              value: /run/secrets/garmin_email
+              value: /etc/garmin-secrets/garmin_email
             - name: GARMIN_PASSWORD_FILE
-              value: /run/secrets/garmin_password
+              value: /etc/garmin-secrets/garmin_password
           volumeMounts:
             - name: garmin-secrets
-              mountPath: /run/secrets
+              mountPath: /etc/garmin-secrets
               readOnly: true
             - name: data
               mountPath: /app/data
-                volumes:
-        - name: garmin-secrets
-          secret:
-            secretName: garmin-secrets
-        - name: data
-          persistentVolumeClaim:
-            claimName: garmin-data
           readinessProbe:
             httpGet:
               path: /
@@ -60,3 +65,10 @@ spec:
             limits:
               # headroom for the headless Chromium (Puppeteer) fallback
               memory: 768Mi
+      volumes:
+        - name: garmin-secrets
+          secret:
+            secretName: garmin-secrets
+        - name: data
+          persistentVolumeClaim:
+            claimName: garmin-data
