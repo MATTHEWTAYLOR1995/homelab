@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
+const { refreshResults } = require('./scripts/import_results_11v11');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -501,9 +502,33 @@ app.get('/fixtures', (req, res) => {
   });
 });
 
+// Refresh scores on the first fixtures API request, then at most every six hours.
+// The fixtures page calls this API on load, so results update without a manual edit.
+const RESULTS_REFRESH_INTERVAL_MS = 10 * 60 * 1000;
+let resultsRefreshStartedAt = 0;
+let resultsRefreshInFlight = null;
+
+function refreshResultsIfDue() {
+  if (resultsRefreshInFlight) return resultsRefreshInFlight;
+  if (Date.now() - resultsRefreshStartedAt < RESULTS_REFRESH_INTERVAL_MS) return Promise.resolve();
+
+  resultsRefreshStartedAt = Date.now();
+  resultsRefreshInFlight = refreshResults()
+    .then(({ updated, pending }) => {
+      if (updated) console.log(`Automatically refreshed ${updated} of ${pending} pending Charlton results.`);
+    })
+    .catch(error => {
+      resultsRefreshStartedAt = Date.now() - RESULTS_REFRESH_INTERVAL_MS + 15 * 60 * 1000;
+      console.warn('Automatic Charlton result refresh failed; serving saved fixture data:', error.message);
+    })
+    .finally(() => { resultsRefreshInFlight = null; });
+  return resultsRefreshInFlight;
+}
+
 // API for fixtures so the client can poll for updates without a full reload
-app.get('/api/fixtures', (req, res) => {
+app.get('/api/fixtures', async (req, res) => {
   try {
+    await refreshResultsIfDue();
     const data = readJSON('fixtures.json');
     const now = new Date();
     const enriched = data.fixtures

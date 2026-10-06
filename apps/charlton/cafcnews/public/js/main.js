@@ -31,7 +31,7 @@
     const day = new Date(f.kickoffAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
     const weekday = new Date(f.kickoffAt).toLocaleDateString('en-GB', { weekday: 'short' });
     const score = (f.homeScore != null && f.awayScore != null)
-      ? (f.venue === 'home' ? `${f.homeScore}-${f.awayScore}` : `${f.awayScore}-${f.homeScore}`)
+      ? `${f.homeScore}-${f.awayScore}`
       : '<span class="fixture-row__pending">Result pending</span>';
     return `
       <div class="fixture-row fixture-row--played reveal">

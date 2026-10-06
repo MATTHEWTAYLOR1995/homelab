@@ -1,6 +1,6 @@
 {
   "season": "2026-27",
-  "lastUpdated": "2026-08-26",
+  "lastUpdated": "2026-10-06",
   "note": "The full Championship fixture list runs to 46 games; this covers the confirmed opening fixtures plus the key dates (derbies, cup rounds, Boxing Day, New Year's Day) that were known when this was last updated. Kick-off times are the club's scheduled 3pm/7:45pm slots unless a TV broadcaster has picked the game — those get moved at a few weeks' notice, so always double-check close to matchday. Add the rest of the fixture list to this file as the EFL and club confirm rounds and reschedules.",
   "fixtures": [
     {
@@ -28,18 +28,6 @@
       "awayScore": 3
     },
     {
-      "date": "2026-08-08",
-      "opponent": "Cheltenham Town",
-      "venue": "away",
-      "competition": "Championship",
-      "kickoff": "15:00",
-      "ground": "",
-      "round": "1. Round",
-      "tbcTime": true,
-      "homeScore": null,
-      "awayScore": null
-    },
-    {
       "date": "2026-08-15",
       "opponent": "Derby",
       "venue": "home",
@@ -48,8 +36,8 @@
       "ground": "",
       "round": "Matchday 1",
       "tbcTime": true,
-      "homeScore": null,
-      "awayScore": null
+      "homeScore": 2,
+      "awayScore": 1
     },
     {
       "date": "2026-08-22",
@@ -60,8 +48,8 @@
       "ground": "",
       "round": "Matchday 2",
       "tbcTime": true,
-      "homeScore": null,
-      "awayScore": null
+      "homeScore": 1,
+      "awayScore": 2
     },
     {
       "date": "2026-08-26",
@@ -71,9 +59,10 @@
       "opponent": "Tottenham Hotspur",
       "ground": "The Valley",
       "round": "Round 2",
-      "tbcTime": false
+      "tbcTime": false,
+      "homeScore": 5,
+      "awayScore": 1
     },
-    
     {
       "date": "2026-08-29",
       "opponent": "Preston North E",
@@ -83,8 +72,8 @@
       "ground": "",
       "round": "Matchday 3",
       "tbcTime": true,
-      "homeScore": null,
-      "awayScore": null
+      "homeScore": 1,
+      "awayScore": 0
     },
     {
       "date": "2026-09-02",
@@ -95,8 +84,8 @@
       "ground": "",
       "round": "Matchday 4",
       "tbcTime": true,
-      "homeScore": null,
-      "awayScore": null
+      "homeScore": 1,
+      "awayScore": 1
     },
     {
       "date": "2026-09-05",
@@ -107,8 +96,8 @@
       "ground": "",
       "round": "Matchday 5",
       "tbcTime": true,
-      "homeScore": null,
-      "awayScore": null
+      "homeScore": 4,
+      "awayScore": 0
     },
     {
       "date": "2026-09-09",
@@ -119,8 +108,8 @@
       "ground": "",
       "round": "Matchday 6",
       "tbcTime": true,
-      "homeScore": null,
-      "awayScore": null
+      "homeScore": 0,
+      "awayScore": 0
     },
     {
       "date": "2026-09-12",
@@ -131,8 +120,8 @@
       "ground": "",
       "round": "Matchday 7",
       "tbcTime": true,
-      "homeScore": null,
-      "awayScore": null
+      "homeScore": 0,
+      "awayScore": 0
     },
     {
       "date": "2026-09-19",
@@ -143,8 +132,8 @@
       "ground": "",
       "round": "Matchday 8",
       "tbcTime": true,
-      "homeScore": null,
-      "awayScore": null
+      "homeScore": 3,
+      "awayScore": 1
     },
     {
       "date": "2026-10-10",

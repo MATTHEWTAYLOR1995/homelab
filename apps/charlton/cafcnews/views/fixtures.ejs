@@ -100,7 +100,7 @@
               <span class="fixture-row__comp tag <%= f.competition === 'Championship' ? 'tag--champ' : f.competition === 'Friendly' ? '' : 'tag--cup' %>"><%= f.competition %></span>
               <span class="fixture-row__score">
                 <% if (f.homeScore != null && f.awayScore != null) { %>
-                  <%= f.venue === 'home' ? `${f.homeScore}-${f.awayScore}` : `${f.awayScore}-${f.homeScore}` %>
+                  <%= `${f.homeScore}-${f.awayScore}` %>
                 <% } else { %>
                   <span class="fixture-row__pending">Result pending</span>
                 <% } %>

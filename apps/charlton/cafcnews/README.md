@@ -6,7 +6,7 @@ An unofficial Charlton Athletic fan site with five main pages:
 - **Confirmed Transfers** (`/transfers/confirmed`) — every done deal, in and out, plus a "check the web" button
 - **Gossip & Rumours** (`/transfers/rumours`) — transfer speculation with a "heat" rating, plus a "check the web" button
 - **Season History** (`/seasons`) — every completed Charlton season since 1919–20: division, final position, manager, cup rounds, promotions/relegations and trophies, filterable by division tier
-- **Fixtures** (`/fixtures`) — every league and cup fixture for the season, home and away, with kick-off times. This page is genuinely dynamic: every time it loads, the server compares each fixture's date/time against the current moment to work out what's next, what's still upcoming, and what's already been played — nothing is hand-flagged
+- **Fixtures** (`/fixtures`) — fixtures and results. On page load, the browser calls `/api/fixtures`; the server checks 11v11 for missing scores at most once every 10 minutes and updates `data/fixtures.json`. A failed source check is logged and retried after 15 minutes. Scores use the source's home-away order.
 - **Fun Facts** (`/facts`) — categorised Charlton trivia plus a "random fact" shuffle button
 
 Built with Node.js + Express + EJS. No database — content lives in JSON files in `/data`, so it's easy to update by hand.
