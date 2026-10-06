@@ -1,0 +1,60 @@
+{
+  "snapshot_date": "2026-07-24",
+  "last_updated": "2026-07-24T09:00:00",
+  "recovery": {
+    "training_readiness_score": 75,
+    "training_readiness_level": "HIGH",
+    "hrv_weekly_avg_ms": 38,
+    "hrv_status": "BALANCED",
+    "sleep_weekly_avg_hours": 7.35,
+    "sleep_weekly_avg_score": 80.1,
+    "training_status_feedback": "PRODUCTIVE_3"
+  },
+  "fitness": {
+    "vo2_max_running": null,
+    "vo2_max_cycling": null,
+    "cycling_ftp_w": 261
+  },
+  "training_load": {
+    "acute_load": 302.0,
+    "chronic_load": 283.0,
+    "load_ratio": 1.0,
+    "acwr_status": "OPTIMAL",
+    "monthly_load_aerobic_low": 559.7,
+    "monthly_load_aerobic_high": 506.0,
+    "monthly_load_anaerobic": 0.0,
+    "aerobic_low_target_min": 171.0,
+    "aerobic_low_target_max": 434.0,
+    "aerobic_high_target_min": 310.0,
+    "aerobic_high_target_max": 572.0,
+    "anaerobic_target_min": 0.0,
+    "anaerobic_target_max": 262.0,
+    "training_balance_feedback": "AEROBIC_LOW_FOCUS"
+  },
+  "recent_load_42d": {
+    "bike_sessions": 14,
+    "bike_total_km": 406.42,
+    "bike_total_hours": 11.49,
+    "bike_avg_hr": 150.0
+  },
+  "weekly_power_trend": [
+    {"week_label": "Jun 13-19", "avg_np_w": 173},
+    {"week_label": "Jun 20-26", "avg_np_w": 181},
+    {"week_label": "Jun 27-Jul 3", "avg_np_w": 180},
+    {"week_label": "Jul 4-10", "avg_np_w": 207},
+    {"week_label": "Jul 11-17", "avg_np_w": 198},
+    {"week_label": "Jul 18-24", "avg_np_w": 216}
+  ],
+  "recent_activities": [
+    {"date": "2026-07-23", "name": "Zwift - Thu - VO2max 5x3", "type": "virtual_ride", "duration_min": 50.6, "avg_power_w": 182, "np_w": 224},
+    {"date": "2026-07-21", "name": "Zwift - Sweetspot Tempo - 40min", "type": "virtual_ride", "duration_min": 38.5, "avg_power_w": 189, "np_w": 203},
+    {"date": "2026-07-20", "name": "Zwift - Thu - VO2max 5x3", "type": "virtual_ride", "duration_min": 50.4, "avg_power_w": 180, "np_w": 217},
+    {"date": "2026-07-17", "name": "Zwift - 170726 - tempo", "type": "virtual_ride", "duration_min": 55.5, "avg_power_w": 175, "np_w": 195},
+    {"date": "2026-07-14", "name": "Zwift - Tempo w/ 2x VO2max Bursts", "type": "virtual_ride", "duration_min": 50.5, "avg_power_w": 203, "np_w": 220},
+    {"date": "2026-07-13", "name": "Zwift - Tue - Sweet Spot 3x8", "type": "virtual_ride", "duration_min": 60.2, "avg_power_w": 168, "np_w": 183},
+    {"date": "2026-07-10", "name": "Zwift - Tempo w/ 2x VO2max Bursts", "type": "virtual_ride", "duration_min": 37.7, "avg_power_w": 192, "np_w": 210},
+    {"date": "2026-07-09", "name": "Zwift - The Ganna", "type": "virtual_ride", "duration_min": 60.7, "avg_power_w": 186, "np_w": 214},
+    {"date": "2026-07-07", "name": "Zwift - Recovery Spin - 30min", "type": "virtual_ride", "duration_min": 42.6, "avg_power_w": 182, "np_w": 199}
+  ]
+}
+

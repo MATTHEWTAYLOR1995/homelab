@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block title %}Improvement{% endblock %}
+{% block content %}
+<h1>How you've improved</h1>
+
+<section class="panel">
+  <h2>Normalized power trend</h2>
+  <div style="position: relative; height: 260px;">
+    <canvas id="npChart2" role="img" aria-label="Weekly average normalized power over recent weeks"></canvas>
+  </div>
+  <p class="note">
+    {% set trend = snapshot.weekly_power_trend %}
+    {% if trend|length > 1 %}
+      {{ trend[0].week_label }} → {{ trend[-1].week_label }}:
+      {{ trend[0].avg_np_w }}W → {{ trend[-1].avg_np_w }}W
+      ({{ '{:+.1f}'.format(((trend[-1].avg_np_w - trend[0].avg_np_w) / trend[0].avg_np_w * 100)) }}%)
+    {% endif %}
+  </p>
+</section>
+
+<section class="panel">
+  <h2>Recent sessions</h2>
+  <div class="activity-table-wrap">
+  <table class="activity-table">
+    <thead>
+      <tr><th>Date</th><th>Session</th><th>Duration</th><th>Avg power</th><th>NP</th></tr>
+    </thead>
+    <tbody>
+      {% for a in snapshot.recent_activities %}
+      <tr>
+        <td>{{ a.date }}</td>
+        <td>{{ a.name }}</td>
+        <td>{{ a.duration_min }} min</td>
+        <td>{{ a.avg_power_w or "—" }} W</td>
+        <td>{{ a.np_w or "—" }} W</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  </div>
+</section>
+
+<section class="panel">
+  <h2>Keep improving</h2>
+  <ul class="tips">
+    <li>Your monthly load feedback is <strong>{{ snapshot.training_load.training_balance_feedback }}</strong> — the weekly plan is weighted to close that gap.</li>
+    <li>ACWR is <strong>{{ snapshot.training_load.load_ratio }}</strong> ({{ snapshot.training_load.acwr_status }}) — keep it between 0.8 and 1.3 to build fitness without overreaching.</li>
+    <li>FTP retests every 4-6 weeks keep the %FTP targets on these sessions accurate as you improve.</li>
+  </ul>
+</section>
+
+<script>
+Chart.defaults.font.family = "'Inter', sans-serif";
+Chart.defaults.color = '#9aa4b2';
+const trend = {{ snapshot.weekly_power_trend | tojson }};
+new Chart(document.getElementById('npChart2'), {
+  type: 'line',
+  data: {
+    labels: trend.map(w => w.week_label),
+    datasets: [{
+      label: 'Avg normalized power (W)',
+      data: trend.map(w => w.avg_np_w),
+      borderColor: '#22c55e',
+      backgroundColor: 'rgba(34,197,94,0.12)',
+      fill: true, tension: 0.35, pointRadius: 4,
+      pointBackgroundColor: '#22c55e', pointBorderColor: '#10131a', pointBorderWidth: 2,
+      borderWidth: 2.5
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: { grid: { color: '#23272f' }, ticks: { font: { family: "'JetBrains Mono', monospace", size: 11 } }, title: { display: true, text: 'Watts', font: { family: "'Inter', sans-serif" } } },
+      x: { grid: { display: false }, ticks: { font: { family: "'JetBrains Mono', monospace", size: 10 } } }
+    }
+  }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,5 @@
+.env
+data/snapshot_cache.json
+secrets/*.txt
+__pycache__/
+*.pyc

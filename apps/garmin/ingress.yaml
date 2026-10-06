@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: garmin
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: garmin.localhost
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: garmin
+                port:
+                  number: 80

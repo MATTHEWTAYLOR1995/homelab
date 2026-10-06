@@ -1,4 +1,4 @@
-name: build-image
+name: build-image-cafcnews
  
 on:
   push:
@@ -33,7 +33,6 @@ jobs:
           context: ./apps/charlton/cafcnews
           push: true
           platforms: linux/amd64
-          # image name must be lowercase
           tags: |
             ghcr.io/matthewtaylor1995/cafcnews:${{ github.sha }}
             ghcr.io/matthewtaylor1995/cafcnews:latest

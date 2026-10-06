@@ -1,0 +1,25 @@
+services:
+  dashboard:
+    build: .
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env
+    environment:
+      # Points the app at Docker secrets files instead of plaintext env vars.
+      # Comment these two lines out (and remove the `secrets:` block below)
+      # if you'd rather use plain GARMIN_EMAIL/GARMIN_PASSWORD in .env instead.
+      - GARMIN_EMAIL_FILE=/run/secrets/garmin_email
+      - GARMIN_PASSWORD_FILE=/run/secrets/garmin_password
+    secrets:
+      - garmin_email
+      - garmin_password
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped
+
+secrets:
+  garmin_email:
+    file: ./secrets/garmin_email.txt
+  garmin_password:
+    file: ./secrets/garmin_password.txt

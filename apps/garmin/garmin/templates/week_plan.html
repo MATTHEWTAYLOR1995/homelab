@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% from "_icons.html" import icon %}
+{% block title %}This week{% endblock %}
+{% block content %}
+<h1>This week's Zwift plan</h1>
+<p class="intro">Generated from your current training load balance and readiness. Updates automatically as your data changes.</p>
+
+<div class="week-grid" style="margin-top: 18px;">
+  {% for entry in week_plan %}
+  <div class="day-card {{ 'is-today' if entry.is_today }}" style="--zone-color: {{ entry.color }};">
+    <div class="day-name">{{ entry.day_short }}</div>
+    <div class="day-icon">{{ icon(entry.icon, 22) }}</div>
+    <div class="day-session">{{ entry.title }}</div>
+    {% if entry.target_w %}
+    <div class="day-target">~{{ entry.target_w }} W target</div>
+    {% endif %}
+    <p class="day-why">{{ entry.why }}</p>
+    {% if entry.session_key != "rest" %}
+    <a class="button small" href="{{ url_for('download_session', session_key=entry.session_key) }}">Download .zwo</a>
+    {% endif %}
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

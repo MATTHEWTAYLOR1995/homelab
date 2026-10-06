@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+{% from "_icons.html" import icon %}
+{% block title %}Overview{% endblock %}
+{% block content %}
+
+<section class="hero" style="--zone-color: {{ today.color }};">
+  <div class="gauge-wrap">
+    <svg width="150" height="90" viewBox="0 0 150 90">
+      <path d="M 10 85 A 65 65 0 0 1 140 85" fill="none" stroke="var(--border)" stroke-width="10" stroke-linecap="round"/>
+      <path d="M 10 85 A 65 65 0 0 1 140 85" fill="none" stroke="{{ today.color }}" stroke-width="10" stroke-linecap="round"
+            stroke-dasharray="204" stroke-dashoffset="{{ 204 - (204 * today.gauge_angle / 180) }}"
+            style="transition: stroke-dashoffset 1s cubic-bezier(.2,.8,.2,1);"/>
+      <g style="transform-origin: 75px 85px; transform: rotate({{ today.gauge_angle - 90 }}deg); transition: transform 1s cubic-bezier(.2,.8,.2,1);">
+        <line x1="75" y1="85" x2="75" y2="28" stroke="{{ today.color }}" stroke-width="3" stroke-linecap="round"/>
+      </g>
+      <circle cx="75" cy="85" r="5" fill="{{ today.color }}"/>
+    </svg>
+    <div class="gauge-value">{% if today.target_w %}{{ today.target_w }} W{% else %}—{% endif %}</div>
+    <div class="gauge-unit">target power</div>
+  </div>
+  <div class="hero-body">
+    <div class="hero-eyebrow">Today's recommendation</div>
+    <div class="hero-title">
+      <span class="zone-chip" style="background: {{ today.color }}22; color: {{ today.color }};">{{ icon(today.icon, 15) }}</span>
+      {{ today.title }}
+    </div>
+    <p class="hero-reason">{{ today.reason }}</p>
+    <div class="hero-actions">
+      {% if today.session_key != "rest" %}
+      <a class="button primary" href="{{ url_for('download_session', session_key=today.session_key) }}">Download .zwo</a>
+      {% endif %}
+      <a class="button" href="{{ url_for('week') }}">See full week</a>
+    </div>
+  </div>
+</section>
+
+<section class="cards">
+  <div class="card">
+    <span class="label">FTP</span>
+    <span class="value">{{ ftp or "—" }}<span style="font-size:14px; color:var(--text-muted);"> W</span></span>
+  </div>
+  <div class="card">
+    <span class="label">Readiness</span>
+    <span class="value">{{ snapshot.recovery.training_readiness_score or "—" }}</span>
+    <span class="sub">{{ snapshot.recovery.training_readiness_level or "" }}</span>
+  </div>
+  <div class="card">
+    <span class="label">HRV weekly avg</span>
+    <span class="value">{{ snapshot.recovery.hrv_weekly_avg_ms or "—" }}<span style="font-size:14px; color:var(--text-muted);"> ms</span></span>
+    <span class="sub">{{ snapshot.recovery.hrv_status or "" }}</span>
+  </div>
+  <div class="card">
+    <span class="label">ACWR</span>
+    <span class="value">{{ snapshot.training_load.load_ratio or "—" }}</span>
+    <span class="sub">{{ snapshot.training_load.acwr_status or "" }}</span>
+  </div>
+</section>
+
+<section class="panel">
+  <h2>Weekly power trend</h2>
+  <div style="position: relative; height: 260px;">
+    <canvas id="npChart" role="img" aria-label="Weekly average normalized power in watts over recent weeks"></canvas>
+  </div>
+</section>
+
+<section class="panel">
+  <h2>Training balance — last 30 days</h2>
+  <div style="position: relative; height: 240px;">
+    <canvas id="loadChart" role="img" aria-label="Bar chart comparing current monthly training load to target ranges for aerobic low, aerobic high, and anaerobic zones"></canvas>
+  </div>
+</section>
+
+<script>
+Chart.defaults.font.family = "'Inter', sans-serif";
+Chart.defaults.color = '#9aa4b2';
+
+const weeklyTrend = {{ snapshot.weekly_power_trend | tojson }};
+new Chart(document.getElementById('npChart'), {
+  type: 'line',
+  data: {
+    labels: weeklyTrend.map(w => w.week_label),
+    datasets: [{
+      label: 'Avg normalized power (W)',
+      data: weeklyTrend.map(w => w.avg_np_w),
+      borderColor: '#22d3ee',
+      backgroundColor: 'rgba(34,211,238,0.12)',
+      fill: true,
+      tension: 0.35,
+      pointRadius: 4,
+      pointBackgroundColor: '#22d3ee',
+      pointBorderColor: '#10131a',
+      pointBorderWidth: 2,
+      borderWidth: 2.5
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: { grid: { color: '#23272f' }, ticks: { font: { family: "'JetBrains Mono', monospace", size: 11 } }, title: { display: true, text: 'Watts', font: { family: "'Inter', sans-serif" } } },
+      x: { grid: { display: false }, ticks: { font: { family: "'JetBrains Mono', monospace", size: 10 } } }
+    }
+  }
+});
+
+const load = {{ snapshot.training_load | tojson }};
+new Chart(document.getElementById('loadChart'), {
+  type: 'bar',
+  data: {
+    labels: ['Aerobic low', 'Aerobic high', 'Anaerobic'],
+    datasets: [
+      {
+        label: 'Current',
+        data: [load.monthly_load_aerobic_low, load.monthly_load_aerobic_high, load.monthly_load_anaerobic],
+        backgroundColor: ['#3b82f6', '#f97316', '#ef4444'],
+        borderRadius: 6,
+        barPercentage: 0.55
+      },
+      {
+        label: 'Target max',
+        data: [load.aerobic_low_target_max, load.aerobic_high_target_max, load.anaerobic_target_max],
+        backgroundColor: '#2a2f3a',
+        borderRadius: 6,
+        barPercentage: 0.55
+      }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { labels: { font: { size: 11 } } } },
+    scales: {
+      y: { grid: { color: '#23272f' }, ticks: { font: { family: "'JetBrains Mono', monospace", size: 11 } } },
+      x: { grid: { display: false } }
+    }
+  }
+});
+</script>
+{% endblock %}

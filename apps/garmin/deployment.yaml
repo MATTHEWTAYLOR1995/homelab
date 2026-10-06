@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: garmin
+spec:
+  # One replica on purpose: the app writes data/transfers-rumours.json to its own
+  # disk, so two pods would each hold a different copy. Those writes are lost when
+  # the pod restarts or a new image rolls out (the JSON in git is the source of truth).
+  replicas: 1
+  selector:
+    matchLabels:
+      app: garmin
+  template:
+    metadata:
+      labels:
+        app: garmin
+    spec:
+      containers:
+        - name: web
+          image: ghcr.io/matthewtaylor1995/garmin
+          ports:
+            - containerPort: 5000
+          env:
+            - name: PORT
+              value: "5000"
+            - name: GARMIN_EMAIL_FILE
+              value: /run/secrets/garmin_email
+            - name: GARMIN_PASSWORD_FILE
+              value: /run/secrets/garmin_password
+          volumeMounts:
+            - name: garmin-secrets
+              mountPath: /run/secrets
+              readOnly: true
+            - name: data
+              mountPath: /app/data
+                volumes:
+        - name: garmin-secrets
+          secret:
+            secretName: garmin-secrets
+        - name: data
+          persistentVolumeClaim:
+            claimName: garmin-data
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 5000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 5000
+            initialDelaySeconds: 20
+            periodSeconds: 20
+            timeoutSeconds: 5
+          resources:
+            requests:
+              cpu: 25m
+              memory: 128Mi
+            limits:
+              # headroom for the headless Chromium (Puppeteer) fallback
+              memory: 768Mi
