@@ -1,0 +1,53 @@
+<%- include('partials/header', { pageTitle: 'Fun Facts' }) %>
+
+<div class="page-head">
+  <div class="page-head__inner">
+    <div class="eyebrow"><%= totalFacts %> facts and counting</div>
+    <h1>Fun Facts</h1>
+    <p class="lede">120 years of Charlton Athletic, boiled down to the stories worth knowing — a goalkeeper found after tragedy, a future US President handing over the cup, and the time fans started their own political party.</p>
+  </div>
+</div>
+
+<section>
+  <div class="wrap">
+    <div class="facts-toolbar">
+      <button id="shuffleFact" class="btn btn--primary" type="button">🎲 Show me a random fact</button>
+      <div id="randomFactCard" class="fact-card fact-card--featured" hidden></div>
+    </div>
+
+    <% data.categories.forEach(cat => { %>
+      <h2 class="section-title"><%= cat.name %></h2>
+      <div class="facts-grid" style="margin-bottom:36px;">
+        <% cat.facts.forEach(f => { %>
+          <div class="fact-card reveal">
+            <span class="fact-card__year"><%= f.year %></span>
+            <h3 class="fact-card__title"><%= f.title %></h3>
+            <p class="fact-card__body"><%= f.body %></p>
+          </div>
+        <% }) %>
+      </div>
+    <% }) %>
+  </div>
+</section>
+
+<script>
+  (function() {
+    const facts = <%- JSON.stringify(data.categories.flatMap(c => c.facts.map(f => ({...f, category: c.name})))) %>;
+    const btn = document.getElementById('shuffleFact');
+    const card = document.getElementById('randomFactCard');
+    btn.addEventListener('click', () => {
+      const f = facts[Math.floor(Math.random() * facts.length)];
+      card.hidden = false;
+      card.innerHTML = `
+        <span class="fact-card__year">${f.year} &middot; ${f.category}</span>
+        <h3 class="fact-card__title">${f.title}</h3>
+        <p class="fact-card__body">${f.body}</p>
+      `;
+      card.classList.remove('is-pulsing');
+      void card.offsetWidth;
+      card.classList.add('is-pulsing');
+    });
+  })();
+</script>
+
+<%- include('partials/footer') %>

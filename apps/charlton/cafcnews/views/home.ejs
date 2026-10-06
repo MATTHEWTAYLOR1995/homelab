@@ -1,0 +1,181 @@
+<%- include('partials/header', { pageTitle: 'Home' }) %>
+
+<section class="hero" style="padding:0;">
+  <div class="hero__inner">
+    <div class="hero__eyebrow">Unofficial Addicks coverage</div>
+    <h1>Everything Charlton,<br>in one place.</h1>
+    <p>Confirmed transfers, the gossip doing the rounds, and a full season-by-season record stretching back to 1919 — DA3's Charlton News keeps it simple: what's happened, what might happen, and where it fits in 120 years of Valley history.</p>
+    <div class="hero__actions">
+      <a href="/transfers/confirmed" class="btn btn--primary">Confirmed transfers</a>
+      <a href="/transfers/rumours" class="btn btn--ghost">Gossip &amp; rumours</a>
+      <a href="/seasons" class="btn btn--ghost">Season history</a>
+    </div>
+  </div>
+</section>
+
+<div class="snapshot">
+  <div class="snapshot__inner">
+    <div class="snapshot__item">
+      <div class="snapshot__label">2025–26 finish</div>
+      <div class="snapshot__value"><%= currentSeason.position %>, <%= currentSeason.division %></div>
+    </div>
+    <div class="snapshot__item">
+      <div class="snapshot__label">Manager</div>
+      <div class="snapshot__value"><%= currentSeason.manager %></div>
+    </div>
+    <div class="snapshot__item">
+      <div class="snapshot__label">Top scorer</div>
+      <div class="snapshot__value"><%= currentSeason.topScorer %> (<%= currentSeason.topScorerGoals %>)</div>
+    </div>
+    <div class="snapshot__item">
+      <div class="snapshot__label">FA Cups won</div>
+      <div class="snapshot__value">1 &mdash; 1946–47</div>
+    </div>
+  </div>
+</div>
+
+<section class="story" id="story">
+  <div class="story__stage">
+    <div class="story__bg story__bg--origins is-active" data-era="origins"></div>
+    <div class="story__bg story__bg--rise" data-era="rise"></div>
+    <div class="story__bg story__bg--crowd" data-era="crowd"></div>
+    <div class="story__bg story__bg--cup" data-era="cup"></div>
+    <div class="story__bg story__bg--wilderness" data-era="wilderness"></div>
+    <div class="story__bg story__bg--return" data-era="return"></div>
+    <div class="story__bg story__bg--today" data-era="today"></div>
+
+    <div class="story__stage-content">
+      <div>
+        <div class="story__label-wrap">
+          <div class="story__era-label is-active" data-era="origins">1905 &middot; Origins</div>
+          <div class="story__era-label" data-era="rise">1934–37 &middot; The Golden Rise</div>
+          <div class="story__era-label" data-era="crowd">1938 &middot; The Biggest Crowd</div>
+          <div class="story__era-label" data-era="cup">1946–47 &middot; Wembley, Twice</div>
+          <div class="story__era-label" data-era="wilderness">1985–92 &middot; The Wilderness Years</div>
+          <div class="story__era-label" data-era="return">1992 &middot; Coming Home</div>
+          <div class="story__era-label" data-era="today">Today &middot; The Valley Now</div>
+        </div>
+        <div class="story__headline-wrap">
+          <div class="story__headline is-active" data-era="origins">Two youth clubs. One team.</div>
+          <div class="story__headline" data-era="rise">Third tier to first, back to back.</div>
+          <div class="story__headline" data-era="crowd">75,031 people. One ground.</div>
+          <div class="story__headline" data-era="cup">A future President hands over the cup.</div>
+          <div class="story__headline" data-era="wilderness">Exiled from home for seven years.</div>
+          <div class="story__headline" data-era="return">Fans start a political party — and win.</div>
+          <div class="story__headline" data-era="today">Still here. Still Charlton.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="story__panels">
+    <div class="story__panel" data-era="origins">
+      <div class="story__panel-inner">
+        <span class="story__panel-year">9 June 1905</span>
+        <h3>Formed from the East Street &amp; Blundell Missions</h3>
+        <p>A group of boys from two local youth clubs in Charlton, south-east London, merged their teams to form Charlton Athletic. The club turned professional in 1920 and joined the Football League the year after.</p>
+      </div>
+    </div>
+    <div class="story__panel" data-era="rise">
+      <div class="story__panel-inner">
+        <span class="story__panel-year">1934–36</span>
+        <h3>A Football League first</h3>
+        <p>Charlton won the Third Division South in 1934–35, then went straight up again as Second Division runners-up the following season — the first club in Football League history to climb from the third tier to the first in back-to-back seasons.</p>
+      </div>
+    </div>
+    <div class="story__panel" data-era="crowd">
+      <div class="story__panel-inner">
+        <span class="story__panel-year">12 February 1938</span>
+        <h3>The Valley's record crowd</h3>
+        <p>75,031 fans packed in for an FA Cup fifth-round tie against Aston Villa. It's still the record attendance at the ground, and one of the biggest crowds ever recorded outside England's top two divisions.</p>
+      </div>
+    </div>
+    <div class="story__panel" data-era="cup">
+      <div class="story__panel-inner">
+        <span class="story__panel-year">1946 &amp; 1947</span>
+        <h3>Runners-up, then champions</h3>
+        <p>Charlton lost the 1946 FA Cup final, then went straight back to Wembley and won it in 1947 — the club's only major trophy. The cup was presented by guest of honour General Dwight D. Eisenhower, five years before he became US President.</p>
+      </div>
+    </div>
+    <div class="story__panel" data-era="wilderness">
+      <div class="story__panel-inner">
+        <span class="story__panel-year">1985–1992</span>
+        <h3>Seven years away from home</h3>
+        <p>A dispute over the ground's freehold forced Charlton out of The Valley in 1985. The club spent seven years ground-sharing at Crystal Palace's Selhurst Park and West Ham's Upton Park.</p>
+      </div>
+    </div>
+    <div class="story__panel" data-era="return">
+      <div class="story__panel-inner">
+        <span class="story__panel-year">1990–1992</span>
+        <h3>The Valley Party</h3>
+        <p>When the council rejected plans for Charlton's return, fans founded "The Valley Party" and contested the 1990 local elections on one issue. They won 14,838 votes, forced the council back to the table, and on 5 December 1992 Charlton finally came home.</p>
+      </div>
+    </div>
+    <div class="story__panel" data-era="today">
+      <div class="story__panel-inner">
+        <span class="story__panel-year">2026</span>
+        <h3>Back in the Championship</h3>
+        <p>120 years on from two youth clubs merging in SE7, Charlton are back in English football's second tier under Nathan Jones — still playing at the ground the fans fought to come home to.</p>
+      </div>
+    </div>
+    <div class="story__end-spacer"></div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap home-grid">
+    <div>
+      <h2 class="section-title">Latest confirmed moves <button id="refreshLatestMovesBtn" class="btn btn--ghost" style="font-size:12px;padding:6px 10px;margin-left:12px;">🔄 Refresh</button></h2>
+      <div class="card-list">
+        <% latestIn.forEach(t => { %>
+          <div class="ticket ticket--in reveal">
+            <span class="ticket__dir">In</span>
+            <div class="ticket__body">
+              <div class="ticket__player"><%= t.player %></div>
+              <div class="ticket__meta">from <%= t.from %> &middot; <%= t.date %></div>
+            </div>
+            <div class="ticket__fee"><%= t.fee %></div>
+          </div>
+        <% }) %>
+        <% latestOut.forEach(t => { %>
+          <div class="ticket ticket--out reveal">
+            <span class="ticket__dir">Out</span>
+            <div class="ticket__body">
+              <div class="ticket__player"><%= t.player %></div>
+              <div class="ticket__meta">to <%= t.to %> &middot; <%= t.date %></div>
+            </div>
+            <div class="ticket__fee"><%= t.fee %></div>
+          </div>
+        <% }) %>
+      </div>
+      <p style="margin-top:16px;"><a href="/transfers/confirmed" class="btn btn--primary">See the full confirmed list &rarr;</a></p>
+    </div>
+
+    <div>
+      <h2 class="section-title">Hottest gossip</h2>
+      <div class="card-list">
+        <% topRumours.forEach(r => { %>
+          <div class="rumour reveal">
+            <div class="rumour__head">
+              <div>
+                <div class="rumour__player"><%= r.player %></div>
+                <div class="rumour__club"><%= r.direction === 'in' ? 'from' : 'to' %> <%= r.club %></div>
+              </div>
+              <span class="rumour__dir"><%= r.direction %></span>
+            </div>
+            <div class="heat">
+              <span class="heat__label">Heat</span>
+              <span class="heat__dots">
+                <% for (let i=1;i<=5;i++) { %><span class="heat__dot <%= i <= r.heat ? 'is-lit' : '' %>"></span><% } %>
+              </span>
+            </div>
+            <p class="rumour__summary"><%= r.summary %></p>
+          </div>
+        <% }) %>
+      </div>
+      <p style="margin-top:16px;"><a href="/transfers/rumours" class="btn btn--primary">Read all the gossip &rarr;</a></p>
+    </div>
+  </div>
+</section>
+
+<%- include('partials/footer') %>

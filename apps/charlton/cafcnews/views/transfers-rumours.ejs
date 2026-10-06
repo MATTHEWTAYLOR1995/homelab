@@ -1,0 +1,67 @@
+<%- include('partials/header', { pageTitle: 'Gossip & Rumours' }) %>
+
+<div class="page-head">
+  <div class="page-head__inner">
+    <div class="eyebrow">Take with a pinch of salt</div>
+    <h1>Gossip &amp; Rumours</h1>
+    <p class="lede">Speculation, links and reported interest from the papers and transfer press. The "heat" rating is a rough read on how strongly a move is being reported, not a prediction.</p>
+  </div>
+</div>
+
+<section>
+  <div class="wrap">
+    <p class="disclaimer"><%= data.disclaimer %></p>
+
+    <div class="news-check">
+      <div class="news-check__head">
+        <div>
+          <h2 class="section-title" style="margin-bottom:4px;">Check the web for new gossip</h2>
+          <p class="news-check__lede">Pulls live headlines that sound like transfer speculation. Nothing here gets added automatically — read the story, then add it to <code>transfers-rumours.json</code> yourself if it's worth tracking.</p>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <button id="checkNewsBtn" class="btn btn--primary" data-filter="rumour" data-source="newsnow" type="button">🔄 Check for updates</button>
+          <button id="pruneConfirmedBtn" class="btn" type="button">🧹 Prune confirmed</button>
+        </div>
+      </div>
+      <p id="newsStatus" class="news-check__status"></p>
+      <div id="newsResults" class="news-results"></div>
+      <div id="prunePreview" style="margin-top:12px;display:none;border:1px solid var(--panel-border);padding:12px;background:var(--panel);">
+        <h3 style="margin-top:0;">Prune preview — rumours matching confirmed transfers</h3>
+        <div id="pruneList"></div>
+        <div style="margin-top:8px;display:flex;gap:8px;">
+          <button id="confirmPruneBtn" class="btn btn--danger" type="button">Confirm prune</button>
+          <button id="cancelPruneBtn" class="btn" type="button">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="rumoursList">
+      <% rumours.forEach(r => { %>
+        <div class="rumour">
+          <div class="rumour__head">
+            <div>
+              <div class="rumour__player"><%= r.player %></div>
+              <div class="rumour__club"><%= r.position %> &middot; <%= r.direction === 'in' ? 'from' : 'to' %> <%= r.club %></div>
+            </div>
+            <span class="rumour__dir"><%= r.direction %></span>
+          </div>
+          <div class="heat">
+            <span class="heat__label">Heat</span>
+            <span class="heat__dots">
+              <% for (let i=1;i<=5;i++) { %><span class="heat__dot <%= i <= r.heat ? 'is-lit' : '' %>"></span><% } %>
+            </span>
+          </div>
+          <p class="rumour__summary"><%= r.summary %></p>
+          <div class="rumour__source">
+            <span><%= r.source %></span>
+            <span><%= r.date %></span>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+
+    <p style="margin-top:32px;font-size:13px;color:var(--ink-soft);font-family:var(--font-mono);">Last updated <%= data.lastUpdated %></p>
+  </div>
+</section>
+
+<%- include('partials/footer') %>

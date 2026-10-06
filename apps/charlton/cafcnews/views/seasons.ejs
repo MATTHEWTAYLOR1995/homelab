@@ -1,0 +1,100 @@
+<%- include('partials/header', { pageTitle: 'Season History' }) %>
+
+<div class="page-head">
+  <div class="page-head__inner">
+    <div class="eyebrow">1919–20 to 2025–26</div>
+    <h1>Season by Season</h1>
+    <p class="lede">Every completed Charlton season: division, final position, manager, cup runs, and every promotion, relegation and trophy along the way.</p>
+  </div>
+</div>
+
+<section>
+  <div class="wrap">
+    <div class="stat-strip">
+      <div class="stat-strip__item">
+        <div class="stat-strip__num"><%= stats.totalSeasons %></div>
+        <div class="stat-strip__label">Seasons recorded</div>
+      </div>
+      <div class="stat-strip__item">
+        <div class="stat-strip__num"><%= stats.topFlightSeasons %></div>
+        <div class="stat-strip__label">In the top flight</div>
+      </div>
+      <div class="stat-strip__item">
+        <div class="stat-strip__num"><%= stats.promotions %></div>
+        <div class="stat-strip__label">Promotions</div>
+      </div>
+      <div class="stat-strip__item">
+        <div class="stat-strip__num"><%= stats.relegations %></div>
+        <div class="stat-strip__label">Relegations</div>
+      </div>
+      <div class="stat-strip__item">
+        <div class="stat-strip__num"><%= stats.faCupWins %></div>
+        <div class="stat-strip__label">FA Cup wins</div>
+      </div>
+    </div>
+
+    <div class="tier-filter">
+      <a href="/seasons?tier=all" class="<%= tierFilter === 'all' ? 'is-active' : '' %>">All divisions</a>
+      <a href="/seasons?tier=1" class="<%= tierFilter === '1' ? 'is-active' : '' %>">Top flight</a>
+      <a href="/seasons?tier=2" class="<%= tierFilter === '2' ? 'is-active' : '' %>">Second tier</a>
+      <a href="/seasons?tier=3" class="<%= tierFilter === '3' ? 'is-active' : '' %>">Third tier</a>
+    </div>
+
+    <div class="season-table-wrap">
+      <table class="seasons">
+        <thead>
+          <tr>
+            <th>Season</th>
+            <th>Division</th>
+            <th>Pos</th>
+            <th>Record (W-D-L)</th>
+            <th>Manager</th>
+            <th>FA Cup</th>
+            <th>League Cup</th>
+            <th>Top scorer</th>
+            <th>Highlights</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% seasons.forEach(s => { %>
+            <tr>
+              <td class="season-cell"><%= s.season %></td>
+              <td class="division-cell"><%= s.division %></td>
+              <td class="pos-cell"><%= s.position %></td>
+              <td class="pos-cell"><%= s.won && s.drawn && s.lost ? `${s.won}-${s.drawn}-${s.lost}` : '—' %></td>
+              <td class="manager-cell"><%= s.manager || '—' %></td>
+              <td class="pos-cell"><%= s.faCup %></td>
+              <td class="pos-cell"><%= s.leagueCup %></td>
+              <td class="manager-cell"><%= s.topScorer ? `${s.topScorer} (${s.topScorerGoals})` : '—' %></td>
+              <td>
+                <% s.highlights.forEach(h => {
+                  let cls = 'tag--champ';
+                  if (h.includes('Promoted') || h.includes('play-offs')) cls = 'tag--up';
+                  else if (h.includes('Relegated')) cls = 'tag--down';
+                  else if (h.includes('Cup') || h.includes('champions')) cls = 'tag--cup';
+                %>
+                  <span class="tag <%= cls %>"><%= h %></span>
+                <% }) %>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="legend">
+      <span><span class="tag tag--up">Promoted</span> promotion (inc. play-offs)</span>
+      <span><span class="tag tag--down">Relegated</span> relegation</span>
+      <span><span class="tag tag--cup">Cup</span> cup win / notable cup run</span>
+      <span><span class="tag tag--champ">Champions</span> league title or best-ever finish</span>
+    </div>
+
+    <p style="margin-top:24px;font-size:13px;color:var(--ink-soft);max-width:70ch;">
+      League records and cup rounds sourced from the club's official season-by-season history. Pre-1980s manager
+      attributions are compiled from historical records and may need double-checking against the club archive —
+      everything from the Alan Curbishley era (1991) onward is solid.
+    </p>
+  </div>
+</section>
+
+<%- include('partials/footer') %>

@@ -1,0 +1,62 @@
+<%- include('partials/header', { pageTitle: 'Live Table' }) %>
+
+<div class="page-head">
+  <div class="page-head__inner">
+    <div class="eyebrow">Live</div>
+    <h1>Championship Table</h1>
+    <p class="lede">Live Championship standings for the current season. Data is fetched from the web and shown here for convenience.</p>
+  </div>
+</div>
+
+<section>
+  <div class="wrap">
+    <div id="tableContainer" class="season-table-wrap">
+      <p class="news-empty">Loading table…</p>
+    </div>
+    <p style="margin-top:18px;font-size:13px;color:var(--ink-soft);font-family:var(--font-mono);" id="tableLastUpdated"></p>
+  </div>
+</section>
+
+<script>
+  async function renderTable() {
+    const el = document.getElementById('tableContainer');
+    try {
+      const res = await fetch('/api/table');
+      const data = await res.json();
+      if (!data.table || !data.table.length) {
+        el.innerHTML = '<p class="news-empty">No table data available.</p>';
+        return;
+      }
+      const rows = data.table.map(r => `
+        <tr>
+          <td>${r.pos}</td>
+          <td class="season-cell">${r.team}</td>
+          <td>${r.played}</td>
+          <td>${r.wins}</td>
+          <td>${r.draws}</td>
+          <td>${r.losses}</td>
+          <td>${r.goalsFor}-${r.goalsAgainst}</td>
+          <td>${r.gd}</td>
+          <td>${r.points}</td>
+        </tr>
+      `).join('');
+      el.innerHTML = `
+        <table class="seasons">
+          <thead>
+            <tr><th>Pos</th><th>Team</th><th>P</th><th>W</th><th>D</th><th>L</th><th>G</th><th>GD</th><th>Pts</th></tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+      `;
+      document.getElementById('tableLastUpdated').textContent = 'Last updated ' + (data.lastUpdated || new Date().toISOString().slice(0,10));
+    } catch (e) {
+      el.innerHTML = '<p class="news-empty">Failed to load table.</p>';
+      console.error(e);
+    }
+  }
+  renderTable();
+  // refresh every 5 minutes
+  setInterval(renderTable, 5 * 60 * 1000);
+</script>
+
+<%- include('partials/footer') %>

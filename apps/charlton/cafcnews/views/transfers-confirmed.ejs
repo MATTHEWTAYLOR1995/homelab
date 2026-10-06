@@ -1,0 +1,84 @@
+<%- include('partials/header', { pageTitle: 'Confirmed Transfers' }) %>
+
+<div class="page-head">
+  <div class="page-head__inner">
+    <div class="eyebrow">Done deals only</div>
+    <h1>Confirmed Transfers</h1>
+    <p class="lede">Every done deal — in and out — announced by the club. No speculation here; if it's on this page, it's official.</p>
+  </div>
+</div>
+
+<section>
+  <div class="wrap">
+    <div class="window-note"><%= data.windowNote %></div>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+      <div style="flex:1"><!-- spacer to keep note placement --></div>
+      <button id="refreshConfirmedBtn" class="btn btn--ghost" type="button">🔄 Refresh list</button>
+    </div>
+
+    <div class="news-check">
+      <div class="news-check__head">
+        <div>
+          <h2 class="section-title" style="margin-bottom:4px;">Check the web for new deals</h2>
+          <p class="news-check__lede">Pulls live headlines mentioning Charlton transfers right now. Nothing here gets added automatically — read the story, then update <code>transfers-confirmed.json</code> yourself if it checks out.</p>
+        </div>
+        <button id="checkNewsBtn" class="btn btn--primary" data-filter="confirmed" type="button">🔄 Check for updates</button>
+      </div>
+      <p id="newsStatus" class="news-check__status"></p>
+      <div id="newsResults" class="news-results"></div>
+    </div>
+
+    <h2 class="section-title">Arrivals</h2>
+    <div class="card-list" style="margin-bottom:40px;">
+      <% inList.forEach(t => { %>
+        <div class="ticket ticket--in ticket--stacked">
+          <div class="ticket__top">
+            <span class="ticket__dir">In</span>
+            <div class="ticket__body">
+              <div class="ticket__player"><%= t.player %> <span style="font-weight:400;color:var(--ink-soft);font-size:14px;">&middot; <%= t.position %></span></div>
+              <div class="ticket__meta">from <strong><%= t.from %></strong> &middot; <%= t.date %> &middot; <%= t.window %></div>
+            </div>
+            <div class="ticket__fee"><%= t.fee %></div>
+          </div>
+          <p class="ticket__note"><%= t.note %></p>
+        </div>
+      <% }) %>
+    </div>
+
+    <h2 class="section-title">Departures</h2>
+    <div class="card-list" style="margin-bottom:40px;">
+      <% outList.forEach(t => { %>
+        <div class="ticket ticket--out ticket--stacked">
+          <div class="ticket__top">
+            <span class="ticket__dir">Out</span>
+            <div class="ticket__body">
+              <div class="ticket__player"><%= t.player %> <span style="font-weight:400;color:var(--ink-soft);font-size:14px;">&middot; <%= t.position %></span></div>
+              <div class="ticket__meta">to <strong><%= t.to %></strong> &middot; <%= t.date %> &middot; <%= t.window %></div>
+            </div>
+            <div class="ticket__fee"><%= t.fee %></div>
+          </div>
+          <p class="ticket__note"><%= t.note %></p>
+        </div>
+      <% }) %>
+    </div>
+
+    <% if (data.extended && data.extended.length) { %>
+      <h2 class="section-title">Contract news</h2>
+      <div class="card-list">
+        <% data.extended.forEach(e => { %>
+          <div class="ticket" style="border-left:5px solid var(--gold);">
+            <div class="ticket__body">
+              <div class="ticket__player"><%= e.player %></div>
+              <div class="ticket__meta"><%= e.type %> &middot; <%= e.date %></div>
+              <p class="ticket__note" style="margin-top:6px;padding-top:0;border:none;"><%= e.note %></p>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    <% } %>
+
+    <p style="margin-top:32px;font-size:13px;color:var(--ink-soft);font-family:var(--font-mono);">Last updated <%= data.lastUpdated %></p>
+  </div>
+</section>
+
+<%- include('partials/footer') %>

@@ -1,0 +1,495 @@
+{
+  "lastUpdated": "2026-08-26",
+  "windowNote": "The 2026 summer transfer window runs 15 June – 1 September 2026. As of this update Charlton haven't made a permanent summer signing yet — the confirmed moves below are released/departed players plus the last completed deals from the January 2026 window, which shaped the squad Nathan Jones takes into 2026-27.",
+  "in": [
+    {
+      "player": "Arthur Okonkwo",
+      "position": "Goalkeeper",
+      "from": "",
+      "date": "2026-08-26",
+      "fee": "Loan",
+      "window": "Summer 2026",
+      "note": "Signed on loan — reported by BBC."
+    },
+    {
+      "player": "Danny McNamara",
+      "position": "Right-back",
+      "from": "",
+      "date": "2026-08-26",
+      "fee": "Undisclosed",
+      "window": "Summer 2026",
+      "note": "Manually added from Transfermarkt search result (no exact source link found)."
+    },
+    {
+      "player": "Flannery",
+      "position": "Midfielder",
+      "team": "women",
+      "from": "West Ham United",
+      "date": "2026-08-26",
+      "fee": "Undisclosed",
+      "window": "Summer 2026",
+      "note": "Signed from West Ham United — reported by Yahoo Sports."
+    },
+    {
+      "player": "Nathaniel Chalobah",
+      "position": "Midfielder",
+      "from": "",
+      "date": "2026-08-26",
+      "fee": "Undisclosed",
+      "window": "Summer 2026",
+      "note": "Experienced midfielder — reported by BBC."
+    },
+    {
+      "player": "Lucia Lobato",
+      "position": "Forward",
+      "from": "",
+      "date": "2026-08-26",
+      "fee": "Undisclosed",
+      "team": "women",
+      "window": "Summer 2026",
+      "note": "Club announcement: first new signing — source: club site."
+    },
+    {
+      "player": "Millenic Alli",
+      "position": "",
+      "date": "2026-08-26",
+      "fee": "€1.80m",
+      "window": "Summer 2026",
+      "note": "Imported from Transfermarkt (https://www.transfermarkt.co.uk/charlton-athletic/transfers/verein/358)",
+      "from": ""
+    },
+    {
+      "player": "Alan Mwamba",
+      "position": "",
+      "date": "2026-08-26",
+      "fee": "Undisclosed",
+      "window": "Summer 2026",
+      "note": "Imported from Transfermarkt (https://www.transfermarkt.co.uk/charlton-athletic/transfers/verein/358)",
+      "from": ""
+    },
+    {
+      "player": "Tanto Olaofe",
+      "position": "",
+      "date": "2026-08-26",
+      "fee": "End of loan 31/05/2027",
+      "window": "Summer 2026",
+      "note": "Imported from Transfermarkt (https://www.transfermarkt.co.uk/charlton-athletic/transfers/verein/358)",
+      "from": ""
+    },
+    {
+      "player": "Zach Mitchell",
+      "position": "",
+      "date": "2026-08-26",
+      "fee": "End of loan 31/05/2027",
+      "window": "Summer 2026",
+      "note": "Imported from Transfermarkt (https://www.transfermarkt.co.uk/charlton-athletic/transfers/verein/358)",
+      "from": ""
+    },
+    {
+      "player": "Timothy Noor Ouma",
+      "position": "Midfielder",
+      "date": "2026-08-01",
+      "fee": "Undisclosed",
+      "window": "Summer 2026",
+      "note": "Imported from worldfootball.net / Slavia Praha -> Charlton",
+      "from": "Slavia Praha"
+    },
+    {
+      "player": "Karlan Grant",
+      "position": "",
+      "date": "2026-07-19",
+      "fee": "Undisclosed",
+      "window": "Summer 2026",
+      "note": "Imported from BeSoccer (https://www.besoccer.com/team/transfers/charlton-athletic-fc)",
+      "from": ""
+    },
+    {
+      "player": "B. Koumetio",
+      "position": "",
+      "date": "2026-07-01",
+      "fee": "Undisclosed",
+      "window": "Summer 2026",
+      "note": "Imported from BeSoccer (https://www.besoccer.com/team/transfers/charlton-athletic-fc)",
+      "from": ""
+    },
+    {
+      "player": "M. Gillesphey",
+      "position": "",
+      "date": "2026-07-01",
+      "fee": "Undisclosed",
+      "window": "Summer 2026",
+      "note": "Imported from BeSoccer (https://www.besoccer.com/team/transfers/charlton-athletic-fc)",
+      "from": "Terry Taylor"
+    },
+    {
+      "player": "Collins Sichenje",
+      "position": "Forward",
+      "from": "",
+      "date": "2026-02-02",
+      "fee": "£2.2m",
+      "window": "Winter 2026",
+      "note": "Deadline-day arrival from Serbia, one of the window's bigger outlays."
+    },
+    {
+      "player": "C. Shichenje",
+      "position": "",
+      "date": "2026-02-02",
+      "fee": "Undisclosed",
+      "window": "Winter 2026",
+      "note": "Imported from BeSoccer (https://www.besoccer.com/team/transfers/charlton-athletic-fc)",
+      "from": ""
+    },
+    {
+      "player": "Conor Coady",
+      "position": "Centre-back",
+      "from": "",
+      "date": "2026-01-29",
+      "fee": "Loan",
+      "window": "Winter 2026",
+      "note": "Experienced centre-back and former England international added defensive know-how; made 12 appearances."
+    },
+    {
+      "player": "Jayden Fevrier",
+      "position": "Winger",
+      "from": "Stockport County",
+      "date": "2026-01-28",
+      "fee": "Loan",
+      "window": "Winter 2026",
+      "note": "Attacking loan reinforcement for the second half of the Championship campaign."
+    },
+    {
+      "player": "A. Maynard-Brewer",
+      "position": "",
+      "date": "2026-01-28",
+      "fee": "Undisclosed",
+      "window": "Winter 2026",
+      "note": "Imported from BeSoccer (https://www.besoccer.com/team/transfers/charlton-athletic-fc)",
+      "from": "Tanto Olaofe"
+    },
+    {
+      "player": "Robert Apter",
+      "position": "",
+      "date": "2026-01-28",
+      "fee": "Undisclosed",
+      "window": "Winter 2026",
+      "note": "Imported from BeSoccer (https://www.besoccer.com/team/transfers/charlton-athletic-fc)",
+      "from": ""
+    },
+    {
+      "player": "J. Roussillon",
+      "position": "",
+      "date": "2026-01-26",
+      "fee": "Undisclosed",
+      "window": "Winter 2026",
+      "note": "Imported from BeSoccer (https://www.besoccer.com/team/transfers/charlton-athletic-fc)",
+      "from": ""
+    },
+    {
+      "player": "Luke Chambers",
+      "position": "Left-back",
+      "from": "Liverpool U21",
+      "date": "2026-01-21",
+      "fee": "Loan",
+      "window": "Winter 2026",
+      "note": "Young left-back joined for the rest of the season."
+    },
+    {
+      "player": "Lyndon Dykes",
+      "position": "Forward",
+      "from": "Birmingham City",
+      "date": "2026-01-15",
+      "fee": "Undisclosed",
+      "window": "Winter 2026",
+      "note": "Scotland international striker signed permanently to lead the line."
+    },
+    {
+      "player": "Harry Clarke",
+      "position": "Defender",
+      "from": "Ipswich Town",
+      "date": "2026-01-12",
+      "fee": "Loan",
+      "window": "Winter 2026",
+      "note": "Versatile defender brought in on loan; a firm favourite of Nathan Jones from his Ipswich connections."
+    },
+    {
+      "player": "James Bree",
+      "position": "",
+      "date": "2025-09-01",
+      "fee": "Undisclosed",
+      "window": "Summer 2025",
+      "note": "Imported from BeSoccer (https://www.besoccer.com/team/transfers/charlton-athletic-fc)",
+      "from": "Player out Z. Mitchell"
+    },
+    {
+      "player": "D. Kanu",
+      "position": "",
+      "date": "2025-08-22",
+      "fee": "Undisclosed",
+      "window": "Summer 2025",
+      "note": "Imported from BeSoccer (https://www.besoccer.com/team/transfers/charlton-athletic-fc)",
+      "from": "Alex Mitchell"
+    },
+    {
+      "player": "Tennai Watson",
+      "position": "",
+      "date": "2025-08-08",
+      "fee": "Undisclosed",
+      "window": "Summer 2025",
+      "note": "Imported from BeSoccer (https://www.besoccer.com/team/transfers/charlton-athletic-fc)",
+      "from": ""
+    },
+    {
+      "player": "Harvey Knibbs",
+      "position": "",
+      "date": "2025-08-01",
+      "fee": "Undisclosed",
+      "window": "Summer 2025",
+      "note": "Imported from BeSoccer (https://www.besoccer.com/team/transfers/charlton-athletic-fc)",
+      "from": ""
+    },
+    {
+      "player": "C. Kelman",
+      "position": "",
+      "date": "2025-07-27",
+      "fee": "Undisclosed",
+      "window": "Summer 2025",
+      "note": "Imported from BeSoccer (https://www.besoccer.com/team/transfers/charlton-athletic-fc)",
+      "from": ""
+    },
+    {
+      "player": "Joe Rankin",
+      "position": "",
+      "date": "2025-07-11",
+      "fee": "Undisclosed",
+      "window": "Summer 2025",
+      "note": "Imported from BeSoccer (https://www.besoccer.com/team/transfers/charlton-athletic-fc)",
+      "from": ""
+    },
+    {
+      "player": "Reece Burke",
+      "position": "",
+      "date": "2025-07-09",
+      "fee": "Undisclosed",
+      "window": "Summer 2025",
+      "note": "Imported from BeSoccer (https://www.besoccer.com/team/transfers/charlton-athletic-fc)",
+      "from": "Amari'i Bell"
+    },
+    {
+      "player": "Amari'i Bell",
+      "position": "",
+      "date": "2025-07-04",
+      "fee": "Undisclosed",
+      "window": "Summer 2025",
+      "note": "Imported from BeSoccer (https://www.besoccer.com/team/transfers/charlton-athletic-fc)",
+      "from": ""
+    }
+  ],
+  "out": [
+    {
+      "player": "K. Dixon",
+      "position": "",
+      "date": "2026-07-24",
+      "fee": "Undisclosed",
+      "window": "Summer 2026",
+      "note": "Imported from BeSoccer (https://www.besoccer.com/team/transfers/charlton-athletic-fc)",
+      "to": "Alex Mitchell"
+    },
+    {
+      "player": "K. Anderson",
+      "position": "",
+      "date": "2026-07-21",
+      "fee": "Undisclosed",
+      "window": "Summer 2026",
+      "note": "Imported from BeSoccer (https://www.besoccer.com/team/transfers/charlton-athletic-fc)",
+      "to": ""
+    },
+    {
+      "player": "Keenan Gough",
+      "position": "Midfielder",
+      "to": "Bristol Rovers",
+      "date": "2026-08-01",
+      "fee": "Undisclosed",
+      "window": "Summer 2026",
+      "note": "Listed as departure on worldfootball.net (08/2026)."
+    },
+    {
+      "player": "Isaac Olaofe",
+      "position": "Forward",
+      "to": "Lincoln City",
+      "date": "2026-08-01",
+      "fee": "Undisclosed",
+      "window": "Summer 2026",
+      "note": "Listed as departure on worldfootball.net (08/2026)."
+    },
+    {
+      "player": "Gassan Ahadme",
+      "position": "Forward",
+      "to": "",
+      "date": "2026-06-14",
+      "fee": "Free",
+      "window": "Summer 2026",
+      "note": "Released at the end of his contract and moved on to League Two."
+    },
+    {
+      "player": "Terry Taylor",
+      "position": "Midfielder",
+      "to": "Northampton Town",
+      "date": "2026-07-01",
+      "fee": "Free",
+      "window": "Summer 2026",
+      "note": "Not offered a new deal by Charlton; agreed terms elsewhere as a free agent."
+    },
+    {
+      "player": "Luke Berry",
+      "position": "Midfielder",
+      "to": "",
+      "date": "2026-07-01",
+      "fee": "Free",
+      "window": "Summer 2026",
+      "note": "Contract expired and was not renewed; yet to confirm his next club."
+    },
+    {
+      "player": "Alex Mitchell",
+      "position": "Defender",
+      "to": "Plymouth Argyle",
+      "date": "2026-05-31",
+      "fee": "Undisclosed",
+      "window": "Summer 2026",
+      "note": "Loan spell at Plymouth made permanent after his Charlton contract ran down."
+    },
+    {
+      "player": "Nathan Asiimwe",
+      "position": "Defender",
+      "to": "AFC Wimbledon",
+      "date": "2026-05-31",
+      "fee": "Free",
+      "window": "Summer 2026",
+      "note": "Departed on a free transfer at the end of his contract."
+    },
+    {
+      "player": "Kaheim Dixon",
+      "position": "Winger",
+      "to": "Crawley Town",
+      "date": "2026-05-31",
+      "fee": "Free",
+      "window": "Summer 2026",
+      "note": "Left after his contract expired, dropping into League Two."
+    },
+    {
+      "player": "Ashley Maynard-Brewer",
+      "position": "Goalkeeper",
+      "to": "Dundee United",
+      "date": "2026-01-28",
+      "fee": "Undisclosed",
+      "window": "Winter 2026",
+      "note": "Permanent exit north of the border after losing the No.1 shirt."
+    },
+    {
+      "player": "Onel Hernández",
+      "position": "Winger",
+      "to": "",
+      "date": "2025-09-29",
+      "fee": "Free",
+      "window": "Summer 2025",
+      "note": "Contract terminated by mutual consent."
+    },
+    {
+      "player": "K. Dixon",
+      "position": "",
+      "date": "2026-07-24",
+      "fee": "Undisclosed",
+      "window": "Summer 2026",
+      "note": "Imported from BeSoccer (https://www.besoccer.com/team/transfers/charlton-athletic-fc)",
+      "to": "Alex Mitchell"
+    },
+    {
+      "player": "K. Anderson",
+      "position": "",
+      "date": "2026-07-21",
+      "fee": "Undisclosed",
+      "window": "Summer 2026",
+      "note": "Imported from BeSoccer (https://www.besoccer.com/team/transfers/charlton-athletic-fc)",
+      "to": ""
+    },
+    {
+      "player": "T. Kaminski",
+      "position": "",
+      "date": "2025-07-01",
+      "fee": "Undisclosed",
+      "window": "Summer 2025",
+      "note": "Imported from BeSoccer (https://www.besoccer.com/team/transfers/charlton-athletic-fc)",
+      "to": ""
+    },
+    {
+      "player": "Sonny Carey",
+      "position": "",
+      "date": "2025-07-01",
+      "fee": "Undisclosed",
+      "window": "Summer 2025",
+      "note": "Imported from BeSoccer (https://www.besoccer.com/team/transfers/charlton-athletic-fc)",
+      "to": ""
+    },
+    {
+      "player": "N. Asiimwe",
+      "position": "",
+      "date": "2025-07-30",
+      "fee": "Undisclosed",
+      "window": "Summer 2025",
+      "note": "Imported from BeSoccer (https://www.besoccer.com/team/transfers/charlton-athletic-fc)",
+      "to": "Dean Bouzanis"
+    },
+    {
+      "player": "Dean Bouzanis",
+      "position": "",
+      "date": "2025-07-07",
+      "fee": "Undisclosed",
+      "window": "Summer 2025",
+      "note": "Imported from BeSoccer (https://www.besoccer.com/team/transfers/charlton-athletic-fc)",
+      "to": ""
+    },
+    {
+      "player": "D. Hylton",
+      "position": "",
+      "date": "2025-07-01",
+      "fee": "Undisclosed",
+      "window": "Summer 2025",
+      "note": "Imported from BeSoccer (https://www.besoccer.com/team/transfers/charlton-athletic-fc)",
+      "to": "Thierry Small"
+    },
+    {
+      "player": "Thierry Small",
+      "position": "",
+      "date": "2025-07-01",
+      "fee": "Undisclosed",
+      "window": "Summer 2025",
+      "note": "Imported from BeSoccer (https://www.besoccer.com/team/transfers/charlton-athletic-fc)",
+      "to": ""
+    },
+    {
+      "player": "A. Henry",
+      "position": "",
+      "date": "2025-07-01",
+      "fee": "Undisclosed",
+      "window": "Summer 2025",
+      "note": "Imported from BeSoccer (https://www.besoccer.com/team/transfers/charlton-athletic-fc)",
+      "to": "Chuks Aneke"
+    },
+    {
+      "player": "Chuks Aneke",
+      "position": "",
+      "date": "2025-07-01",
+      "fee": "Undisclosed",
+      "window": "Summer 2025",
+      "note": "Imported from BeSoccer (https://www.besoccer.com/team/transfers/charlton-athletic-fc)",
+      "to": ""
+    }
+  ],
+  "extended": [
+    {
+      "player": "Tyreece Campbell",
+      "type": "Contract extension",
+      "date": "2026-06-15",
+      "note": "Club triggered the option to extend his contract to the summer of 2027."
+    }
+  ]
+}

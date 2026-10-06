@@ -1,0 +1,21 @@
+{
+  "name": "da3s-charlton-news",
+  "version": "1.0.0",
+  "description": "DA3's Charlton News - confirmed transfers, gossip and full season history for Charlton Athletic",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "import:transfermarkt": "node scripts/import_transfermarkt.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "cheerio": "^1.2.0",
+    "ejs": "^3.1.10",
+    "express": "^4.19.2",
+    "node-fetch": "^3.3.2",
+    "puppeteer": "^21.11.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

@@ -1,0 +1,117 @@
+<%- include('partials/header', { pageTitle: 'Fixtures' }) %>
+
+<div class="page-head">
+  <div class="page-head__inner">
+    <div class="eyebrow"><%= season %> season</div>
+    <h1>Fixtures</h1>
+    <p class="lede">Every league and cup fixture, home and away, with kick-off times. This page works out what's next and what's already been played by checking the date every time it loads — it's not a static list.</p>
+  </div>
+</div>
+
+<section>
+  <div class="wrap">
+    <div class="window-note"><%= note %></div>
+
+    <% if (nextFixture) {
+      const daysUntil = Math.ceil((nextFixture.kickoffAt - now) / (1000 * 60 * 60 * 24));
+      const dayLabel = nextFixture.kickoffAt.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' });
+    %>
+      <div class="next-fixture">
+        <div class="next-fixture__eyebrow">Next up <% if (daysUntil >= 0) { %>&middot; <%= daysUntil === 0 ? 'Today' : daysUntil === 1 ? 'Tomorrow' : `in ${daysUntil} days` %><% } %></div>
+        <div class="next-fixture__match">
+          <span class="next-fixture__team"><%= nextFixture.venue === 'home' ? 'Charlton Athletic' : nextFixture.opponent %></span>
+          <span class="next-fixture__vs">vs</span>
+          <span class="next-fixture__team"><%= nextFixture.venue === 'home' ? nextFixture.opponent : 'Charlton Athletic' %></span>
+        </div>
+        <div class="next-fixture__meta">
+          <span class="venue-badge venue-badge--<%= nextFixture.venue %>"><%= nextFixture.venue === 'home' ? 'Home' : 'Away' %></span>
+          <span><%= dayLabel %></span>
+          <span><%= nextFixture.kickoff %> <%= nextFixture.tbcTime ? '(provisional)' : 'kick-off' %></span>
+          <span><%= nextFixture.competition %><% if (nextFixture.round) { %> &middot; <%= nextFixture.round %><% } %></span>
+          <span><%= nextFixture.ground %></span>
+        </div>
+      </div>
+    <% } %>
+
+    <div class="stat-strip">
+      <div class="stat-strip__item">
+        <div class="stat-strip__num"><%= stats.total %></div>
+        <div class="stat-strip__label">Fixtures listed</div>
+      </div>
+      <div class="stat-strip__item">
+        <div class="stat-strip__num"><%= stats.home %></div>
+        <div class="stat-strip__label">At The Valley</div>
+      </div>
+      <div class="stat-strip__item">
+        <div class="stat-strip__num"><%= stats.away %></div>
+        <div class="stat-strip__label">Away</div>
+      </div>
+      <div class="stat-strip__item">
+        <div class="stat-strip__num"><%= stats.cup %></div>
+        <div class="stat-strip__label">Cup games</div>
+      </div>
+    </div>
+
+    <div class="tier-filter">
+      <% competitions.forEach(c => { %>
+        <a href="/fixtures?comp=<%= encodeURIComponent(c) %>" class="<%= compFilter === c ? 'is-active' : '' %>"><%= c === 'all' ? 'All competitions' : c %></a>
+      <% }) %>
+    </div>
+
+    <h2 class="section-title">Upcoming</h2>
+    <div class="fixture-list">
+      <% if (!upcoming.length) { %>
+        <p class="news-empty">No upcoming fixtures in this competition right now.</p>
+      <% } %>
+      <% upcoming.forEach(f => { %>
+        <div class="fixture-row reveal">
+          <div class="fixture-row__date">
+            <span class="fixture-row__day"><%= f.kickoffAt.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' }) %></span>
+            <span class="fixture-row__weekday"><%= f.kickoffAt.toLocaleDateString('en-GB', { weekday: 'short' }) %></span>
+          </div>
+          <span class="venue-badge venue-badge--<%= f.venue %>"><%= f.venue === 'home' ? 'H' : 'A' %></span>
+          <div class="fixture-row__match">
+            <span class="fixture-row__opponent"><%= f.opponent %></span>
+            <span class="fixture-row__ground"><%= f.ground %><% if (f.round) { %> &middot; <%= f.round %><% } %></span>
+          </div>
+          <span class="fixture-row__comp tag <%= f.competition === 'Championship' ? 'tag--champ' : f.competition === 'Friendly' ? '' : 'tag--cup' %>"><%= f.competition %></span>
+          <span class="fixture-row__kickoff"><%= f.kickoff %><% if (f.tbcTime) { %><span class="fixture-row__tbc">*</span><% } %></span>
+        </div>
+      <% }) %>
+    </div>
+    <p class="fixture-footnote">* Provisional kick-off time — subject to change for TV selection. Check charltonafc.com before travelling.</p>
+
+      <h2 class="section-title" style="margin-top:40px;">Results <button id="refreshFixturesBtn" class="btn btn--ghost" style="margin-left:12px;font-size:13px;padding:6px 10px;">Refresh results</button></h2>
+      <div id="resultsList" class="fixture-list">
+        <% if (!results || !results.length) { %>
+          <p class="news-empty">No results available.</p>
+        <% } else { %>
+          <% results.forEach(f => { %>
+            <div class="fixture-row fixture-row--played reveal">
+              <div class="fixture-row__date">
+                <span class="fixture-row__day"><%= f.kickoffAt.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' }) %></span>
+                <span class="fixture-row__weekday"><%= f.kickoffAt.toLocaleDateString('en-GB', { weekday: 'short' }) %></span>
+              </div>
+              <span class="venue-badge venue-badge--<%= f.venue %>"><%= f.venue === 'home' ? 'H' : 'A' %></span>
+              <div class="fixture-row__match">
+                <span class="fixture-row__opponent"><%= f.opponent %></span>
+                <span class="fixture-row__ground"><%= f.ground %><% if (f.round) { %> &middot; <%= f.round %><% } %></span>
+              </div>
+              <span class="fixture-row__comp tag <%= f.competition === 'Championship' ? 'tag--champ' : f.competition === 'Friendly' ? '' : 'tag--cup' %>"><%= f.competition %></span>
+              <span class="fixture-row__score">
+                <% if (f.homeScore != null && f.awayScore != null) { %>
+                  <%= f.venue === 'home' ? `${f.homeScore}-${f.awayScore}` : `${f.awayScore}-${f.homeScore}` %>
+                <% } else { %>
+                  <span class="fixture-row__pending">Result pending</span>
+                <% } %>
+              </span>
+            </div>
+          <% }) %>
+        <% } %>
+      </div>
+
+    <p id="fixturesLastUpdated" style="margin-top:32px;font-size:13px;color:var(--ink-soft);font-family:var(--font-mono);">Fixtures last updated <%= lastUpdated %></p>
+  </div>
+</section>
+
+<%- include('partials/footer') %>
