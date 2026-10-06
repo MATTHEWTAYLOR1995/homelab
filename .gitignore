@@ -1,0 +1,4 @@
+# never commit plain secrets
+*.secret.yaml
+*-secret.yaml
+.env
