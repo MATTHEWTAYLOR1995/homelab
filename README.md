@@ -9,8 +9,9 @@ flowchart LR
   docker["Docker Desktop<br/>(start manually)"] --> k3d["k3d: homelab cluster"]
   k3d --> traefik["Traefik ingress<br/>host port 8080"]
   browser["Browser on PC"] -->|app.localhost:8080| traefik
-  phone["Phone / other LAN device<br/>main home Wi-Fi"] -->|192.168.1.109:3001 Charlton<br/>192.168.1.109:3002 Garmin| proxy["Nginx LAN proxy"]
+  phone["Phone / other LAN device<br/>main home Wi-Fi"] -->|HTTP :3001 Charlton<br/>HTTP :3002 Garmin<br/>HTTPS :3003 Argo CD| proxy["Nginx LAN proxy"]
   proxy -->|host-based routing via :8080| traefik
+  traefik -->|argocd.localhost| argocdUI["Argo CD UI<br/>Ingress → Service → Pod"]
 
   github["GitHub homelab repo<br/>main branch"] -->|manifests| argocd["Argo CD"]
   argocd -->|syncs| charlton["Charlton<br/>Ingress → Service → Pod"]
@@ -61,6 +62,7 @@ You can open the apps from a phone, tablet, or another computer without setting 
 
 - Charlton: <http://192.168.1.109:3001>
 - Garmin: <http://192.168.1.109:3002>
+- Argo CD: <https://192.168.1.109:3003> (self-signed certificate; see Argo CD section below)
 
 The small Nginx proxy listens on those ports and forwards each request to the existing Traefik ingress with the hostname that app expects. Before using the links, Docker Desktop must be running and the `homelab` k3d cluster must be up. Start the proxy once from the repository root if it is not already running:
 
@@ -71,10 +73,10 @@ docker compose -f .\compose.lan.yml up -d
 The proxy uses Docker's `unless-stopped` restart policy, so it starts again when Docker Desktop starts. If a link times out, check that the proxy container is running with `docker ps --filter name=homelab-lan-proxy`. If Windows Firewall is blocking the connection, add this inbound rule in an Administrator PowerShell:
 
 ```powershell
-New-NetFirewallRule -DisplayName "Homelab LAN sites" -Direction Inbound -Action Allow -Protocol TCP -LocalPort "3001-3002" -RemoteAddress "192.168.1.0/24" -Profile Public
+New-NetFirewallRule -DisplayName "Homelab LAN sites" -Direction Inbound -Action Allow -Protocol TCP -LocalPort "3001-3003" -RemoteAddress "192.168.1.0/24" -Profile Public
 ```
 
-These links use plain HTTP for trusted devices on your home LAN. Do not create a router port-forward for these ports. If the PC's static IP changes, update the address in `compose.lan.yml`, both upstream addresses in `lan-proxy/nginx.conf`, and the links above.
+Charlton and Garmin use HTTP; Argo CD uses HTTPS with the local self-signed certificate. Do not create a router port-forward for these ports. If the PC's static IP changes, update the address in `compose.lan.yml`, the upstream addresses in `lan-proxy/nginx.conf`, the certificate SAN, and the links above.
 
 To stop the LAN proxy:
 
@@ -83,14 +85,34 @@ docker compose -f .\compose.lan.yml down
 ```
 ## Argo CD
 
-To open the Argo CD UI, run this in PowerShell and leave the terminal open:
+Argo CD is available from the PC or another device on the home LAN at <https://192.168.1.109:3003>. This route uses the Nginx LAN proxy and Traefik ingress; it does not require a terminal port-forward, local DNS, or a router port-forward. The TLS certificate is self-signed, so browsers will show a certificate warning unless you install the certificate as trusted on the device.
+
+The Argo CD route is configured by `argocd/ui-access.yaml`. Apply it once (and again after changing it):
 
 ```powershell
-kubectl port-forward svc/argocd-server -n argocd 8081:443
+kubectl apply -f .\argocd\ui-access.yaml
+kubectl rollout restart deployment/argocd-server -n argocd
+kubectl rollout status deployment/argocd-server -n argocd
 ```
 
-Then browse to <https://localhost:8081>. The browser may show a certificate warning because this is the local Argo CD service.
+The Nginx proxy needs a local certificate and key. They are ignored by Git. Regenerate them if the local `lan-proxy\certs` directory is missing:
 
+```powershell
+New-Item -ItemType Directory -Force .\lan-proxy\certs | Out-Null
+& 'C:\Program Files\Git\usr\bin\openssl.exe' req -x509 -nodes -days 825 -newkey rsa:2048 `
+  -keyout .\lan-proxy\certs\argocd.key `
+  -out .\lan-proxy\certs\argocd.crt `
+  -subj '/CN=192.168.1.109' `
+  -addext 'subjectAltName=IP:192.168.1.109,DNS:argocd.localhost'
+```
+
+Start or refresh the proxy from the repository root:
+
+```powershell
+docker compose -f .\compose.lan.yml up -d
+```
+
+Argo CD's server runs in insecure HTTP mode behind the LAN proxy, which terminates TLS. The app-to-cluster path stays on the private LAN. Do not expose port `3003` through your router.
 Useful status and troubleshooting commands:
 
 ```powershell
@@ -137,5 +159,3 @@ This stops the cluster containers but keeps the cluster and its persistent volum
 ### Garmin sync note
 
 The Garmin pod can be healthy while showing fallback data if Garmin returns HTTP `429 Too Many Requests`. The current app performs a fresh Garmin login on each background poll and manual refresh. Avoid repeated refreshes while rate-limited; persistent Garmin token reuse still needs to be implemented.
-
-

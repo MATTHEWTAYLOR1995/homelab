@@ -3,4 +3,5 @@
 *-secret.yaml
 .env
 node_modules/
+lan-proxy/certs/
 !apps/garmin/sealed-secret.yaml
