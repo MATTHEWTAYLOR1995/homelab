@@ -53,28 +53,26 @@ The k3d load balancer publishes Traefik ingress on host port `8080`:
 - Charlton: <http://charlton.localhost:8080>
 - Garmin: <http://garmin.localhost:8080>
 
-## Access from another LAN device by PC IP
+## Access from a phone or other device on your home LAN
 
-A small Nginx proxy can expose the two apps on separate ports without local DNS records. It forwards to the existing Traefik ingress and supplies the hostname each Ingress expects.
+You can open the apps from a phone, tablet, or another computer without setting up local DNS. Connect the device to your **main home Wi-Fi/LAN** (not an isolated guest network), then enter the PC's static LAN IP and the app's port in the browser:
 
-Start it once from the repository root:
+- Charlton: <http://192.168.1.109:3001>
+- Garmin: <http://192.168.1.109:3002>
+
+The small Nginx proxy listens on those ports and forwards each request to the existing Traefik ingress with the hostname that app expects. Before using the links, Docker Desktop must be running and the `homelab` k3d cluster must be up. Start the proxy once from the repository root if it is not already running:
 
 ```powershell
 docker compose -f .\compose.lan.yml up -d
 ```
 
-Open these addresses from a device on the main home LAN:
-
-- Charlton: <http://192.168.1.109:3001>
-- Garmin: <http://192.168.1.109:3002>
-
-The proxy binds only to `192.168.1.109`, uses Docker's `unless-stopped` restart policy, and starts again when Docker Desktop starts. If Windows Firewall blocks access, add a narrow inbound rule from the home subnet in an Administrator PowerShell:
+The proxy uses Docker's `unless-stopped` restart policy, so it starts again when Docker Desktop starts. If a link times out, check that the proxy container is running with `docker ps --filter name=homelab-lan-proxy`. If Windows Firewall is blocking the connection, add this inbound rule in an Administrator PowerShell:
 
 ```powershell
 New-NetFirewallRule -DisplayName "Homelab LAN sites" -Direction Inbound -Action Allow -Protocol TCP -LocalPort "3001-3002" -RemoteAddress "192.168.1.0/24" -Profile Public
 ```
 
-Do not create a router port-forward for these ports. This is plain HTTP intended for trusted devices on the home LAN. If the PC's static address changes, update the bound address in `compose.lan.yml` and the URLs above.
+These links use plain HTTP for trusted devices on your home LAN. Do not create a router port-forward for these ports. If the PC's static IP changes, update the address in `compose.lan.yml`, both upstream addresses in `lan-proxy/nginx.conf`, and the links above.
 
 To stop the LAN proxy:
 
