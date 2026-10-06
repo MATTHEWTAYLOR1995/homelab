@@ -6,9 +6,11 @@ This repository manages workloads on the existing local Kubernetes cluster. The 
 
 ```mermaid
 flowchart LR
-  browser["Browser"] -->|localhost:8080| traefik["Traefik ingress"]
   docker["Docker Desktop<br/>(start manually)"] --> k3d["k3d: homelab cluster"]
-  traefik --> k3d
+  k3d --> traefik["Traefik ingress<br/>host port 8080"]
+  browser["Browser on PC"] -->|app.localhost:8080| traefik
+  phone["Phone / other LAN device<br/>main home Wi-Fi"] -->|192.168.1.109:3001 Charlton<br/>192.168.1.109:3002 Garmin| proxy["Nginx LAN proxy"]
+  proxy -->|host-based routing via :8080| traefik
 
   github["GitHub homelab repo<br/>main branch"] -->|manifests| argocd["Argo CD"]
   argocd -->|syncs| charlton["Charlton<br/>Ingress → Service → Pod"]
