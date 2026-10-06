@@ -1,0 +1,10 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: charlton
+resources:
+  - deployment.yaml
+  - service.yaml
+  - ingress.yaml
+images:
+  - name: ghcr.io/matthewtaylor1995/cafcnews
+    newTag: REPLACE_WITH_A_COMMIT_SHA

@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: charlton
+spec:
+  # One replica on purpose: the app writes data/transfers-rumours.json to its own
+  # disk, so two pods would each hold a different copy. Those writes are lost when
+  # the pod restarts or a new image rolls out (the JSON in git is the source of truth).
+  replicas: 1
+  selector:
+    matchLabels:
+      app: charlton
+  template:
+    metadata:
+      labels:
+        app: charlton
+    spec:
+      containers:
+        - name: web
+          image: ghcr.io/matthewtaylor1995/cafcnews
+          ports:
+            - containerPort: 3000
+          env:
+            - name: PORT
+              value: "3000"
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 20
+            periodSeconds: 20
+            timeoutSeconds: 5
+          resources:
+            requests:
+              cpu: 25m
+              memory: 128Mi
+            limits:
+              # headroom for the headless Chromium (Puppeteer) fallback
+              memory: 768Mi
