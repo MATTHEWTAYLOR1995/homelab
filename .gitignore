@@ -3,3 +3,4 @@
 *-secret.yaml
 .env
 node_modules/
+!apps/garmin/sealed-secret.yaml
