@@ -4,7 +4,7 @@
   <div class="hero__inner">
     <div class="hero__eyebrow">Unofficial Addicks coverage</div>
     <h1>Everything Charlton,<br>in one place.</h1>
-    <p>Confirmed transfers, the gossip doing the rounds, and a full season-by-season record stretching back to 1919 — DA3's Charlton News keeps it simple: what's happened, what might happen, and where it fits in 120 years of Valley history.</p>
+    <p>Confirmed transfers, the gossip doing the rounds, and a full season-by-season record stretching back to 1919 — Charlton News keeps it simple: what's happened, what might happen, and where it fits in 120 years of Valley history.</p>
     <div class="hero__actions">
       <a href="/transfers/confirmed" class="btn btn--primary">Confirmed transfers</a>
       <a href="/transfers/rumours" class="btn btn--ghost">Gossip &amp; rumours</a>
@@ -154,6 +154,7 @@
     <div>
       <h2 class="section-title">Hottest gossip</h2>
       <div class="card-list">
+        <% if (!topRumours.length) { %><p class="news-empty">No recent rumours are being tracked. See the Gossip &amp; Rumours page for current headlines.</p><% } %>
         <% topRumours.forEach(r => { %>
           <div class="rumour reveal">
             <div class="rumour__head">

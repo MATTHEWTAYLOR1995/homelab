@@ -4,7 +4,7 @@
   <div class="page-head__inner">
     <div class="eyebrow">Take with a pinch of salt</div>
     <h1>Gossip &amp; Rumours</h1>
-    <p class="lede">Speculation, links and reported interest from the papers and transfer press. The "heat" rating is a rough read on how strongly a move is being reported, not a prediction.</p>
+    <p class="lede">Recent Charlton headlines are refreshed automatically. They link to the original reporting and do not count as transfer confirmation. The "heat" rating on tracked rumours is only a rough read on how strongly a move is being reported.</p>
   </div>
 </div>
 
@@ -15,15 +15,15 @@
     <div class="news-check">
       <div class="news-check__head">
         <div>
-          <h2 class="section-title" style="margin-bottom:4px;">Check the web for new gossip</h2>
-          <p class="news-check__lede">Pulls live headlines that sound like transfer speculation. Nothing here gets added automatically — read the story, then add it to <code>transfers-rumours.json</code> yourself if it's worth tracking.</p>
+          <h2 class="section-title" style="margin-bottom:4px;">Latest Charlton headlines</h2>
+          <p class="news-check__lede">Google News headlines from the last seven days. This list loads when you open the page and refreshes every 15 minutes. Headlines are not treated as confirmed deals.</p>
         </div>
         <div style="display:flex;gap:8px;align-items:center;">
-          <button id="checkNewsBtn" class="btn btn--primary" data-filter="rumour" data-source="newsnow" type="button">🔄 Check for updates</button>
+          <button id="checkNewsBtn" class="btn btn--primary" type="button">🔄 Refresh headlines</button>
           <button id="pruneConfirmedBtn" class="btn" type="button">🧹 Prune confirmed</button>
         </div>
       </div>
-      <p id="newsStatus" class="news-check__status"></p>
+      <p id="newsStatus" class="news-check__status">Loading recent headlines…</p>
       <div id="newsResults" class="news-results"></div>
       <div id="prunePreview" style="margin-top:12px;display:none;border:1px solid var(--panel-border);padding:12px;background:var(--panel);">
         <h3 style="margin-top:0;">Prune preview — rumours matching confirmed transfers</h3>
@@ -35,7 +35,11 @@
       </div>
     </div>
 
+    <h2 class="section-title" style="margin-top:40px;">Tracked rumours from the last 30 days</h2>
     <div id="rumoursList">
+      <% if (!rumours.length) { %>
+        <p class="news-empty">No recently dated rumours are being tracked. Older entries are hidden so the page stays current.</p>
+      <% } %>
       <% rumours.forEach(r => { %>
         <div class="rumour">
           <div class="rumour__head">

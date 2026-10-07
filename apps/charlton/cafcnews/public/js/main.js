@@ -113,18 +113,26 @@
   const homeBtn = document.getElementById('refreshLatestMovesBtn');
   if (!pageBtn && !homeBtn) return;
 
+  function noteFor(t) {
+    const note = (t.note || '').trim();
+    return /^Imported from (Transfermarkt|BeSoccer)/i.test(note) ? '' : note;
+  }
+  function detailsFor(t, clubLabel, club) {
+    return [club ? `${clubLabel} <strong>${club}</strong>` : '', t.date || '', t.window || ''].filter(Boolean).join(' &middot; ');
+  }
+
   function renderTicketIn(t) {
     return `
       <div class="ticket ticket--in ticket--stacked">
         <div class="ticket__top">
           <span class="ticket__dir">In</span>
           <div class="ticket__body">
-            <div class="ticket__player">${t.player} <span style="font-weight:400;color:var(--ink-soft);font-size:14px;">&middot; ${t.position || ''}</span></div>
-            <div class="ticket__meta">from <strong>${t.from || ''}</strong> &middot; ${t.date || ''} &middot; ${t.window || ''}</div>
+            <div class="ticket__player">${t.player}${t.position ? ` <span style="font-weight:400;color:var(--ink-soft);font-size:14px;">&middot; ${t.position}</span>` : ''}</div>
+            <div class="ticket__meta">${detailsFor(t, 'from', t.from)}</div>
           </div>
-          <div class="ticket__fee">${t.fee || ''}</div>
+          ${t.fee ? `<div class="ticket__fee">${t.fee}</div>` : ''}
         </div>
-        <p class="ticket__note">${t.note || ''}</p>
+        ${noteFor(t) ? `<p class="ticket__note">${noteFor(t)}</p>` : ''}
       </div>
     `;
   }
@@ -135,12 +143,12 @@
         <div class="ticket__top">
           <span class="ticket__dir">Out</span>
           <div class="ticket__body">
-            <div class="ticket__player">${t.player} <span style="font-weight:400;color:var(--ink-soft);font-size:14px;">&middot; ${t.position || ''}</span></div>
-            <div class="ticket__meta">to <strong>${t.to || ''}</strong> &middot; ${t.date || ''} &middot; ${t.window || ''}</div>
+            <div class="ticket__player">${t.player}${t.position ? ` <span style="font-weight:400;color:var(--ink-soft);font-size:14px;">&middot; ${t.position}</span>` : ''}</div>
+            <div class="ticket__meta">${detailsFor(t, 'to', t.to)}</div>
           </div>
-          <div class="ticket__fee">${t.fee || ''}</div>
+          ${t.fee ? `<div class="ticket__fee">${t.fee}</div>` : ''}
         </div>
-        <p class="ticket__note">${t.note || ''}</p>
+        ${noteFor(t) ? `<p class="ticket__note">${noteFor(t)}</p>` : ''}
       </div>
     `;
   }
@@ -274,120 +282,93 @@
 // ============================================================
 (function liveNewsCheck() {
   const btn = document.getElementById('checkNewsBtn');
-  if (!btn) return;
-
   const resultsEl = document.getElementById('newsResults');
   const statusEl = document.getElementById('newsStatus');
-  const filterType = btn.dataset.filter || 'all'; // 'all' | 'confirmed' | 'rumour'
-  const filterSource = btn.dataset.source || 'google';
+  const isRumoursPage = !!document.getElementById('rumoursList');
+  if (!resultsEl || !statusEl || (!btn && !isRumoursPage)) return;
+
+  const filterType = isRumoursPage ? 'all' : (btn.dataset.filter || 'all');
+  const filterSource = isRumoursPage ? 'google' : (btn.dataset.source || 'google');
 
   function renderItems(items) {
     if (!items.length) {
       resultsEl.innerHTML = '<p class="news-empty">No fresh headlines matched right now — try again in a bit.</p>';
       return;
     }
-    resultsEl.innerHTML = items.map(item => `
-      <a class="news-item" href="${item.link}" target="_blank" rel="noopener noreferrer">
-        <span class="news-item__badge news-item__badge--${item.guess}">${item.guess === 'confirmed' ? 'Sounds confirmed' : item.guess === 'rumour' ? 'Sounds like gossip' : 'Unclear'}</span>
-        <span class="news-item__title">${item.title}</span>
-        <span class="news-item__meta">${item.source || 'Unknown source'} &middot; ${item.age || ''}</span>
-      </a>
-    `).join('');
+    resultsEl.replaceChildren();
+    items.forEach(item => {
+      let url;
+      try { url = new URL(item.link); } catch { return; }
+      if (url.protocol !== 'https:') return;
+      const link = document.createElement('a');
+      link.className = 'news-item';
+      link.href = url.href;
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      const badge = document.createElement('span');
+      badge.className = `news-item__badge news-item__badge--${item.guess || 'unclear'}`;
+      badge.textContent = isRumoursPage ? 'Headline · not confirmation' : ({ confirmed: 'Sounds confirmed', rumour: 'Sounds like gossip', unclear: 'Unclear' }[item.guess] || 'Unclear');
+      const title = document.createElement('span');
+      title.className = 'news-item__title';
+      title.textContent = item.title || 'Untitled story';
+      const meta = document.createElement('span');
+      meta.className = 'news-item__meta';
+      meta.textContent = `${item.source || 'Google News'} · ${item.age || ''}`;
+      link.append(badge, title, meta);
+      resultsEl.append(link);
+    });
+    if (!resultsEl.children.length) resultsEl.innerHTML = '<p class="news-empty">No recent Charlton headlines found.</p>';
   }
 
-  btn.addEventListener('click', async () => {
-    btn.disabled = true;
-    const originalLabel = btn.textContent;
-    btn.textContent = 'Checking the web…';
-    statusEl.textContent = '';
-    resultsEl.innerHTML = '<p class="news-empty">Searching for the latest Charlton stories…</p>';
-
+  let loading = false;
+  async function loadNews() {
+    if (loading) return;
+    loading = true;
+    if (btn) {
+      btn.disabled = true;
+      btn.dataset.originalLabel ||= btn.textContent;
+      btn.textContent = 'Checking the web…';
+    }
     try {
       const res = await fetch(`/api/news?type=${encodeURIComponent(filterType)}&source=${encodeURIComponent(filterSource)}`);
       if (!res.ok) throw new Error(`Server responded ${res.status}`);
       const data = await res.json();
-
       if (data.error) {
-        statusEl.textContent = data.error;
-        resultsEl.innerHTML = '';
+        if (data.items && data.items.length) {
+          renderItems(data.items);
+          const checkedAt = data.checkedAt ? new Date(data.checkedAt).toLocaleString('en-GB') : 'earlier';
+          statusEl.textContent = `${data.error} Showing headlines cached ${checkedAt}.`;
+        } else {
+          statusEl.textContent = data.error;
+          resultsEl.innerHTML = '';
+        }
       } else {
-        // ensure newest-first ordering by pubDate when available
         const items = (data.items || []).slice().sort((a, b) => {
           const da = a.pubDate ? new Date(a.pubDate).getTime() : 0;
           const db = b.pubDate ? new Date(b.pubDate).getTime() : 0;
           return db - da;
         });
         renderItems(items);
-        statusEl.textContent = `Checked just now — ${items.length} headline${items.length === 1 ? '' : 's'} found. This list refreshes only when you press the button.`;
-        // Also refresh confirmed transfers/arrivals so the whole page shows latest data
-        if (window.updateConfirmedParts) {
-          try { window.updateConfirmedParts(); } catch (e) { console.warn('updateConfirmedParts failed', e); }
-        }
-        // Also fetch a larger batch of gossip from multiple sources and
-        // populate the stacked `#rumoursList` block (news items first,
-        // then stored rumours from the server).
-        try {
-          const list = document.getElementById('rumoursList');
-          if (list) {
-            // Fetch combined news items (Google + NewsNow)
-            const extraRes = await fetch('/api/news?type=rumour&source=both');
-            if (extraRes && extraRes.ok) {
-              const extraJson = await extraRes.json();
-              list.innerHTML = (extraJson.items || []).map(it => `
-                <div class="rumour">
-                  <div class="rumour__head">
-                    <div>
-                      <div class="rumour__player"><a href="${it.link}" target="_blank" rel="noopener noreferrer">${it.title}</a></div>
-                      <div class="rumour__club">${it.source || ''}</div>
-                    </div>
-                    <span class="rumour__dir">${it.guess || ''}</span>
-                  </div>
-                  <p class="rumour__summary">${it.age || ''}</p>
-                </div>
-              `).join('');
-            }
-
-            // Then append stored rumours from the site's `data/transfers-rumours.json`
-            try {
-              const rumRes = await fetch('/api/rumours');
-              if (rumRes && rumRes.ok) {
-                const rumJson = await rumRes.json();
-                const stored = (rumJson.rumours || []).map(r => `
-                  <div class="rumour">
-                    <div class="rumour__head">
-                      <div>
-                        <div class="rumour__player">${r.player}</div>
-                        <div class="rumour__club">${r.position || ''} &middot; ${r.direction === 'in' ? 'from' : 'to'} ${r.club || ''}</div>
-                      </div>
-                      <span class="rumour__dir">${r.direction || ''}</span>
-                    </div>
-                    <div class="heat">
-                      <span class="heat__label">Heat</span>
-                      <span class="heat__dots">${[1,2,3,4,5].map(i => `<span class="heat__dot ${i <= (r.heat||0) ? 'is-lit' : ''}"></span>`).join('')}</span>
-                    </div>
-                    <p class="rumour__summary">${r.summary || ''}</p>
-                    <div class="rumour__source">
-                      <span>${r.source || ''}</span>
-                      <span>${r.date || ''}</span>
-                    </div>
-                  </div>
-                `).join('');
-                list.insertAdjacentHTML('beforeend', stored);
-              }
-            } catch (e) { console.warn('Failed to append stored rumours', e); }
-          }
-        } catch (e) {
-          console.warn('Failed to refresh rumours:', e);
-        }
+        const checkedAt = data.checkedAt ? new Date(data.checkedAt) : new Date();
+        statusEl.textContent = `Updated ${checkedAt.toLocaleString('en-GB')} · refreshes every 15 minutes. Headlines are links to reporting, not confirmation.`;
       }
     } catch (err) {
       statusEl.textContent = "Couldn't reach the web from here — the site's network access may be restricted. Try again, or check the club's official site directly.";
       resultsEl.innerHTML = '';
     } finally {
-      btn.disabled = false;
-      btn.textContent = originalLabel;
+      loading = false;
+      if (btn) {
+        btn.disabled = false;
+        btn.textContent = btn.dataset.originalLabel;
+      }
     }
-  });
+  }
+
+  if (btn) btn.addEventListener('click', loadNews);
+  if (isRumoursPage) {
+    loadNews();
+    setInterval(loadNews, 15 * 60 * 1000);
+  }
 
   // Prune confirmed workflow
   const pruneBtn = document.getElementById('pruneConfirmedBtn');

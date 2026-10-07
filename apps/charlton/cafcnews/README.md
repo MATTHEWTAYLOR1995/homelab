@@ -1,25 +1,21 @@
-# DA3's Charlton News
+# Charlton News
 
 An unofficial Charlton Athletic fan site with five main pages:
 
 - **Home** (`/`) — a scroll-driven "120 years of Charlton" story: the background crossfades through different eras (1905 origins, the 1930s golden rise, the 1938 record crowd, the 1947 FA Cup, the 1985–92 wilderness years, the 1992 return home, today) as you scroll
-- **Confirmed Transfers** (`/transfers/confirmed`) — every done deal, in and out, plus a "check the web" button
-- **Gossip & Rumours** (`/transfers/rumours`) — transfer speculation with a "heat" rating, plus a "check the web" button
+- **Confirmed Transfers** (`/transfers/confirmed`) — manually maintained official deals, in and out
+- **Gossip & Rumours** (`/transfers/rumours`) — automatically refreshed Charlton headlines and recently tracked transfer speculation
 - **Season History** (`/seasons`) — every completed Charlton season since 1919–20: division, final position, manager, cup rounds, promotions/relegations and trophies, filterable by division tier
 - **Fixtures** (`/fixtures`) — fixtures and results. On page load, the browser calls `/api/fixtures`; the server checks 11v11 for missing scores at most once every 10 minutes and updates `data/fixtures.json`. A failed source check is logged and retried after 15 minutes. Scores use the source's home-away order.
 - **Fun Facts** (`/facts`) — categorised Charlton trivia plus a "random fact" shuffle button
 
 Built with Node.js + Express + EJS. No database — content lives in JSON files in `/data`, so it's easy to update by hand.
 
-### Live "check the web" button
+### Automatic Charlton news headlines
 
-The Confirmed Transfers and Gossip & Rumours pages each have a **🔄 Check for updates** button. Pressing it calls the server's `/api/news` endpoint, which searches Google News' public RSS feed (no API key needed) for current Charlton transfer headlines and lists them with a rough "sounds confirmed / sounds like gossip" guess based on keywords in the headline.
+The Gossip & Rumours page loads Google News RSS headlines from the last seven days when opened and refreshes them every 15 minutes while the page remains open. The **Refresh headlines** button requests an immediate update. Results are cached in memory for 15 minutes, so multiple visitors share the same feed request. The container needs outbound internet access to `news.google.com`.
 
-Important honesty note: **this never edits the site automatically.** There's no reliable way for software to turn a headline into a structured "player X, fee Y, from club Z" entry — that still needs a human to read the story and judge it. The button is a research shortcut (it does the searching for you), not an auto-updater. When something checks out, add it to the relevant JSON file yourself.
-
-Two things worth knowing about this feature:
-- It needs the Docker container to have normal outbound internet access (it calls `news.google.com`). If your network is locked down, the button will fail gracefully with a message rather than crash the page.
-- Results are cached in memory for 4 minutes, so mashing the button repeatedly won't hammer Google News.
+Headlines link to reporting; they are not verified transfer facts and are never written into the site's JSON data. Confirmed deals remain manually maintained in `data/transfers-confirmed.json`. Transfer rumours in `data/transfers-rumours.json` older than 30 days are hidden from the current pages so stale speculation does not appear current.
 
 ## Run it with Docker (recommended)
 

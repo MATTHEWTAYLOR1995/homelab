@@ -1,7 +1,7 @@
 {
-  "name": "da3s-charlton-news",
+  "name": "charlton-news",
   "version": "1.0.0",
-  "description": "DA3's Charlton News - confirmed transfers, gossip and full season history for Charlton Athletic",
+  "description": "Charlton News - confirmed transfers, gossip and full season history for Charlton Athletic",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

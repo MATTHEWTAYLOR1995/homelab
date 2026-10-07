@@ -19,7 +19,7 @@ function readJSON(file) {
 }
 
 const SITE = {
-  name: "DA3's Charlton News",
+  name: "Charlton News",
   club: 'Charlton Athletic',
   tagline: 'Valley, Floyd Road.'
 };
@@ -53,7 +53,9 @@ app.get('/', (req, res) => {
     currentSeason,
     latestIn: confirmedInFiltered.slice(0, 3),
     latestOut: confirmedOutSorted.slice(0, 3),
-    topRumours: [...rumours.rumours].sort((a, b) => b.heat - a.heat).slice(0, 4)
+    topRumours: [...rumours.rumours]
+      .filter(r => r.date && new Date(r.date).getTime() >= Date.now() - 30 * 24 * 60 * 60 * 1000)
+      .sort((a, b) => b.heat - a.heat).slice(0, 4)
   });
 });
 
@@ -75,8 +77,12 @@ app.get('/transfers/confirmed', (req, res) => {
 
 app.get('/transfers/rumours', (req, res) => {
   const data = readJSON('transfers-rumours.json');
+  const freshnessCutoff = Date.now() - 30 * 24 * 60 * 60 * 1000;
   // Sort rumours newest-first by date, then by heat as a secondary key
-  const sorted = [...data.rumours].slice().sort((a, b) => {
+  const sorted = [...data.rumours].filter(r => {
+    const date = r.date ? new Date(r.date).getTime() : 0;
+    return date >= freshnessCutoff;
+  }).sort((a, b) => {
     const da = a.date ? new Date(a.date).getTime() : 0;
     const db = b.date ? new Date(b.date).getTime() : 0;
     if (db !== da) return db - da;
@@ -126,19 +132,17 @@ app.get('/facts', (req, res) => {
 });
 
 // ============================================================
-// Live news check — /api/news
+// Charlton headline feed — /api/news
 //
-// Pulls real, current headlines from Google News' public RSS
-// search feed (no API key required) and does a rough keyword-based
-// guess at whether each one sounds like a confirmed deal or gossip.
-// It NEVER writes to the site's data files: it's a research aid for
-// whoever maintains the site, not an auto-updater. Results are
-// cached briefly in memory so mashing the refresh button doesn't
-// hammer Google News.
+// Pulls recent items from Google News RSS (no API key required).
+// It never writes to site data: headlines are links for readers to review,
+// not automatically verified transfer records. Results are cached in memory
+// and concurrent refresh requests share one upstream fetch.
 // ============================================================
 
 const NEWS_CACHE = new Map(); // key -> { at, items }
-const NEWS_CACHE_TTL_MS = 4 * 60 * 1000; // 4 minutes
+const NEWS_CACHE_TTL_MS = 15 * 60 * 1000; // 15 minutes
+let newsFetchPromise = null;
 
 const CONFIRMED_HINTS = [
   'sign', 'signs', 'signing', 'signed', 'complete', 'completes', 'completed',
@@ -200,7 +204,9 @@ function parseRssItems(xml) {
 }
 
 async function fetchCharltonNews() {
-  const query = encodeURIComponent('"Charlton Athletic" transfer OR signing OR loan OR deal');
+  // Broader than transfer-only results so the gossip page also surfaces
+  // current club news. Google News supports the when:7d freshness operator.
+  const query = encodeURIComponent('"Charlton Athletic" when:7d');
   const url = `https://news.google.com/rss/search?q=${query}&hl=en-GB&gl=GB&ceid=GB:en`;
 
   const controller = new AbortController();
@@ -213,6 +219,12 @@ async function fetchCharltonNews() {
     if (!res.ok) throw new Error(`Feed responded ${res.status}`);
     const xml = await res.text();
     let rawItems = parseRssItems(xml).slice(0, 50);
+    const freshnessCutoff = Date.now() - 7 * 24 * 60 * 60 * 1000;
+    rawItems = rawItems.filter(item => {
+      if (!item.pubDate) return false;
+      const published = new Date(item.pubDate).getTime();
+      return Number.isFinite(published) && published >= freshnessCutoff;
+    });
     // sort newest-first by pubDate when available
     rawItems = rawItems.sort((a, b) => {
       const da = a.pubDate ? new Date(a.pubDate).getTime() : 0;
@@ -431,14 +443,34 @@ app.get('/api/news', async (req, res) => {
         if (seen.has(key)) return false; seen.add(key); return true;
       });
     } else {
-      items = await fetchCharltonNews();
+      const cached = NEWS_CACHE.get('google');
+      if (cached && Date.now() - cached.at < NEWS_CACHE_TTL_MS) {
+        items = cached.items;
+      } else {
+        if (!newsFetchPromise) {
+          newsFetchPromise = fetchCharltonNews()
+            .then(fetched => {
+              NEWS_CACHE.set('google', { at: Date.now(), items: fetched });
+              return fetched;
+            })
+            .finally(() => { newsFetchPromise = null; });
+        }
+        items = await newsFetchPromise;
+      }
     }
 
     const filtered = type === 'all' ? items : items.filter(i => i.guess === type);
-    res.json({ checkedAt: new Date().toISOString(), items: filtered });
+    const cached = source === 'google' ? NEWS_CACHE.get('google') : null;
+    res.json({ checkedAt: cached ? new Date(cached.at).toISOString() : new Date().toISOString(), items: filtered });
   } catch (err) {
     console.error('news check failed:', err.message || err);
-    res.json({ checkedAt: new Date().toISOString(), items: [], error: "Couldn't reach the news feed from the server." });
+    const cached = NEWS_CACHE.get('google');
+    res.json({
+      checkedAt: cached ? new Date(cached.at).toISOString() : null,
+      items: cached ? cached.items : [],
+      stale: !!cached,
+      error: "Couldn't refresh the news feed from the server."
+    });
   }
 });
 
@@ -560,7 +592,11 @@ app.get('/api/confirmed', (req, res) => {
 app.get('/api/rumours', (req, res) => {
   try {
     const data = readJSON('transfers-rumours.json');
-    const sorted = [...(data.rumours || [])].slice().sort((a, b) => {
+    const freshnessCutoff = Date.now() - 30 * 24 * 60 * 60 * 1000;
+    const sorted = [...(data.rumours || [])].filter(r => {
+      const date = r.date ? new Date(r.date).getTime() : 0;
+      return date >= freshnessCutoff;
+    }).sort((a, b) => {
       const da = a.date ? new Date(a.date).getTime() : 0;
       const db = b.date ? new Date(b.date).getTime() : 0;
       if (db !== da) return db - da;
@@ -735,5 +771,5 @@ app.use((req, res) => {
 });
 
 app.listen(PORT, '0.0.0.0', () => {
-  console.log(`⚽ DA3's Charlton News running at http://localhost:${PORT}`);
+  console.log(`⚽ Charlton News running at http://localhost:${PORT}`);
 });

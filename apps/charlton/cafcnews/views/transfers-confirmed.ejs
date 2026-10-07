@@ -16,18 +16,6 @@
       <button id="refreshConfirmedBtn" class="btn btn--ghost" type="button">🔄 Refresh list</button>
     </div>
 
-    <div class="news-check">
-      <div class="news-check__head">
-        <div>
-          <h2 class="section-title" style="margin-bottom:4px;">Check the web for new deals</h2>
-          <p class="news-check__lede">Pulls live headlines mentioning Charlton transfers right now. Nothing here gets added automatically — read the story, then update <code>transfers-confirmed.json</code> yourself if it checks out.</p>
-        </div>
-        <button id="checkNewsBtn" class="btn btn--primary" data-filter="confirmed" type="button">🔄 Check for updates</button>
-      </div>
-      <p id="newsStatus" class="news-check__status"></p>
-      <div id="newsResults" class="news-results"></div>
-    </div>
-
     <h2 class="section-title">Arrivals</h2>
     <div class="card-list" style="margin-bottom:40px;">
       <% inList.forEach(t => { %>
@@ -35,12 +23,12 @@
           <div class="ticket__top">
             <span class="ticket__dir">In</span>
             <div class="ticket__body">
-              <div class="ticket__player"><%= t.player %> <span style="font-weight:400;color:var(--ink-soft);font-size:14px;">&middot; <%= t.position %></span></div>
-              <div class="ticket__meta">from <strong><%= t.from %></strong> &middot; <%= t.date %> &middot; <%= t.window %></div>
+              <div class="ticket__player"><%= t.player %><% if (t.position) { %> <span style="font-weight:400;color:var(--ink-soft);font-size:14px;">&middot; <%= t.position %></span><% } %></div>
+              <div class="ticket__meta"><% if (t.from) { %>from <strong><%= t.from %></strong><% } %><% if (t.date) { %><%= t.from ? ' · ' : '' %><%= t.date %><% } %><% if (t.window) { %><%= t.from || t.date ? ' · ' : '' %><%= t.window %><% } %></div>
             </div>
-            <div class="ticket__fee"><%= t.fee %></div>
+            <% if (t.fee) { %><div class="ticket__fee"><%= t.fee %></div><% } %>
           </div>
-          <p class="ticket__note"><%= t.note %></p>
+          <% if (t.note && !/^Imported from (Transfermarkt|BeSoccer)/i.test(t.note)) { %><p class="ticket__note"><%= t.note %></p><% } %>
         </div>
       <% }) %>
     </div>
@@ -52,12 +40,12 @@
           <div class="ticket__top">
             <span class="ticket__dir">Out</span>
             <div class="ticket__body">
-              <div class="ticket__player"><%= t.player %> <span style="font-weight:400;color:var(--ink-soft);font-size:14px;">&middot; <%= t.position %></span></div>
-              <div class="ticket__meta">to <strong><%= t.to %></strong> &middot; <%= t.date %> &middot; <%= t.window %></div>
+              <div class="ticket__player"><%= t.player %><% if (t.position) { %> <span style="font-weight:400;color:var(--ink-soft);font-size:14px;">&middot; <%= t.position %></span><% } %></div>
+              <div class="ticket__meta"><% if (t.to) { %>to <strong><%= t.to %></strong><% } %><% if (t.date) { %><%= t.to ? ' · ' : '' %><%= t.date %><% } %><% if (t.window) { %><%= t.to || t.date ? ' · ' : '' %><%= t.window %><% } %></div>
             </div>
-            <div class="ticket__fee"><%= t.fee %></div>
+            <% if (t.fee) { %><div class="ticket__fee"><%= t.fee %></div><% } %>
           </div>
-          <p class="ticket__note"><%= t.note %></p>
+          <% if (t.note && !/^Imported from (Transfermarkt|BeSoccer)/i.test(t.note)) { %><p class="ticket__note"><%= t.note %></p><% } %>
         </div>
       <% }) %>
     </div>
