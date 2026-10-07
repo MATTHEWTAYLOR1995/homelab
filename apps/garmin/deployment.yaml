@@ -35,6 +35,8 @@ spec:
           env:
             - name: PORT
               value: "5000"
+            - name: GARMIN_TOKENSTORE
+              value: /app/data/garmin_tokens
             - name: GARMIN_EMAIL_FILE
               value: /etc/garmin-secrets/garmin_email
             - name: GARMIN_PASSWORD_FILE

@@ -2,7 +2,7 @@
 Garmin data access layer.
 
 Live mode: if GARMIN_EMAIL / GARMIN_PASSWORD are set in the environment,
-a background poller periodically logs in via python-garminconnect and
+a background poller authenticates with persistent Garmin OAuth tokens and
 caches fresh stats to data/snapshot_cache.json. Page loads always read
 from the cache (fast, no live API call per request) - the poller is what
 keeps it current.
@@ -22,11 +22,21 @@ from datetime import datetime, timedelta
 DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
 SEED_PATH = os.path.join(DATA_DIR, "snapshot_seed.json")
 CACHE_PATH = os.path.join(DATA_DIR, "snapshot_cache.json")
+TOKENSTORE_PATH = os.environ.get(
+    "GARMIN_TOKENSTORE", os.path.join(DATA_DIR, "garmin_tokens")
+)
+POLL_STATE_PATH = os.path.join(DATA_DIR, "garmin_poll_state.json")
+DEFAULT_POLL_INTERVAL_SECONDS = int(os.environ.get("POLL_INTERVAL_MINUTES", "15")) * 60
+MAX_POLL_BACKOFF_SECONDS = 24 * 60 * 60
 
 logger = logging.getLogger("garmin_client")
 
 _poll_lock = threading.Lock()
 _last_poll_error = None
+_consecutive_poll_failures = 0
+_next_poll_at = 0.0
+_retry_after_epoch = 0.0
+_last_poll_attempt = 0.0
 
 
 def get_secret(name):
@@ -58,6 +68,51 @@ def has_credentials():
 def _load_json(path):
     with open(path) as f:
         return json.load(f)
+
+
+def _load_poll_state():
+    """Restore 429 backoff from the PVC so pod restarts do not retry early."""
+    global _consecutive_poll_failures, _retry_after_epoch, _last_poll_error
+    try:
+        state = _load_json(POLL_STATE_PATH)
+        _consecutive_poll_failures = max(0, int(state.get("consecutive_failures", 0)))
+        _retry_after_epoch = max(0.0, float(state.get("retry_after_epoch", 0)))
+        _last_poll_error = state.get("last_error")
+    except FileNotFoundError:
+        return
+    except (OSError, ValueError, TypeError, json.JSONDecodeError) as e:
+        logger.warning("Could not restore Garmin poll retry state: %s", e)
+
+
+def _save_poll_state():
+    """Persist only retry metadata; never write credentials or Garmin tokens here."""
+    temporary_path = f"{POLL_STATE_PATH}.tmp"
+    try:
+        with open(temporary_path, "w") as f:
+            json.dump(
+                {
+                    "consecutive_failures": _consecutive_poll_failures,
+                    "retry_after_epoch": _retry_after_epoch,
+                    "last_error": _last_poll_error,
+                },
+                f,
+            )
+        os.chmod(temporary_path, 0o600)
+        os.replace(temporary_path, POLL_STATE_PATH)
+    except OSError as e:
+        logger.warning("Could not save Garmin poll retry state: %s", e)
+
+
+def _clear_poll_state():
+    try:
+        os.remove(POLL_STATE_PATH)
+    except FileNotFoundError:
+        pass
+    except OSError as e:
+        logger.warning("Could not clear Garmin poll retry state: %s", e)
+
+
+_load_poll_state()
 
 
 def _fallback_snapshot():
@@ -100,8 +155,14 @@ def fetch_live():
     if not email or not password:
         raise RuntimeError("Garmin credentials not configured")
 
+    os.makedirs(TOKENSTORE_PATH, mode=0o700, exist_ok=True)
+    try:
+        os.chmod(TOKENSTORE_PATH, 0o700)
+    except OSError as e:
+        logger.warning("Could not restrict Garmin token directory permissions: %s", e)
+
     client = garminconnect.Garmin(email, password)
-    client.login()
+    client.login(TOKENSTORE_PATH)
 
     today = datetime.now().strftime("%Y-%m-%d")
     since = (datetime.now() - timedelta(days=42)).strftime("%Y-%m-%d")
@@ -174,64 +235,88 @@ def fetch_live():
 
 
 def get_snapshot(force_refresh=False):
-    """Public entry point used by the Flask app.
-
-    Always fast: reads the cache (or seed, if no cache yet exists). Only
-    hits the live Garmin API directly when force_refresh=True (manual
-    "Refresh Garmin data" button) or when live mode is configured but no
-    cache exists yet (first run before the poller has completed a cycle).
-    """
+    """Read the cached snapshot, optionally requesting a guarded live refresh."""
     has_creds = has_credentials()
 
-    if force_refresh and has_creds:
-        try:
-            return fetch_live(), "live"
-        except Exception as e:
-            return _fallback_snapshot(), f"fallback ({e.__class__.__name__})"
-
-    if has_creds and not os.path.exists(CACHE_PATH):
-        try:
-            return fetch_live(), "live"
-        except Exception as e:
-            return _fallback_snapshot(), f"fallback ({e.__class__.__name__})"
+    if has_creds and (force_refresh or not os.path.exists(CACHE_PATH)):
+        poll_once(force=force_refresh)
 
     if has_creds:
-        mode = "live (cached)" if _last_poll_error is None else f"live (cached, last poll failed: {_last_poll_error})"
+        mode = (
+            "live (cached)"
+            if _last_poll_error is None
+            else f"live (cached, last poll failed: {_last_poll_error})"
+        )
         return _fallback_snapshot(), mode
 
     return _fallback_snapshot(), "demo"
 
 
-def poll_once():
-    """Single poll cycle: fetch live data and cache it. Safe to call from a timer thread."""
-    global _last_poll_error
+def poll_once(interval_seconds=DEFAULT_POLL_INTERVAL_SECONDS, force=False):
+    """Fetch Garmin data once, reusing saved tokens and backing off after failures."""
+    global _last_poll_error, _consecutive_poll_failures
+    global _next_poll_at, _retry_after_epoch, _last_poll_attempt
     if not has_credentials():
-        return
+        return False
+
     with _poll_lock:
+        now = time.monotonic()
+        if time.time() < _retry_after_epoch:
+            logger.debug("Skipping Garmin poll during failure cooldown")
+            return False
+        if not force and now < _next_poll_at:
+            return False
+        if force and now - _last_poll_attempt < 60:
+            logger.debug(
+                "Skipping Garmin refresh requested within 60 seconds of the previous attempt"
+            )
+            return False
+
+        _last_poll_attempt = now
         try:
             fetch_live()
             _last_poll_error = None
+            _consecutive_poll_failures = 0
+            _retry_after_epoch = 0.0
+            _next_poll_at = time.monotonic() + interval_seconds
+            _clear_poll_state()
             logger.info("Garmin poll succeeded")
+            return True
         except Exception as e:
             _last_poll_error = f"{e.__class__.__name__}"
-            logger.warning("Garmin poll failed: %s", e)
+            _consecutive_poll_failures += 1
+            is_rate_limited = "429" in str(e) or "TooManyRequests" in e.__class__.__name__
+            base_delay = (
+                max(interval_seconds, 60 * 60) if is_rate_limited else interval_seconds
+            )
+            delay = min(
+                base_delay * (2 ** (_consecutive_poll_failures - 1)),
+                MAX_POLL_BACKOFF_SECONDS,
+            )
+            _retry_after_epoch = time.time() + delay
+            _next_poll_at = time.monotonic() + delay
+            _save_poll_state()
+            logger.warning(
+                "Garmin poll failed; retrying in %s seconds (failure %s): %s",
+                delay,
+                _consecutive_poll_failures,
+                e,
+            )
+            return False
 
 
-def start_background_poller(interval_seconds=900):
-    """Starts a daemon thread that calls poll_once() on a fixed interval.
-
-    No-op if GARMIN_EMAIL isn't set (nothing to poll in demo mode).
-    Does an immediate poll first so the cache is warm as soon as possible,
-    then repeats every interval_seconds.
-    """
+def start_background_poller(interval_seconds=DEFAULT_POLL_INTERVAL_SECONDS):
+    """Start one background poller that respects retries and token reuse."""
     if not has_credentials():
         return None
 
     def _loop():
-        poll_once()
+        poll_once(interval_seconds)
         while True:
-            time.sleep(interval_seconds)
-            poll_once()
+            now = time.monotonic()
+            next_run = _next_poll_at if _next_poll_at > now else now + interval_seconds
+            time.sleep(max(1, min(interval_seconds, next_run - now)))
+            poll_once(interval_seconds)
 
     thread = threading.Thread(target=_loop, name="garmin-poller", daemon=True)
     thread.start()

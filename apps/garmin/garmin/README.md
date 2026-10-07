@@ -83,8 +83,16 @@ Other live-mode notes:
 ## Keeping data fresh automatically
 
 When live mode is configured (`GARMIN_EMAIL`/`GARMIN_PASSWORD` set), a background
-thread polls Garmin every **15 minutes by default** and refreshes the cache -
-no need to click "Refresh" manually. Change the interval with:
+thread polls Garmin every **15 minutes by default** and refreshes the cache.
+The first successful login stores OAuth tokens in
+`/app/data/garmin_tokens` on the Kubernetes PVC. Later polls reuse and refresh
+those tokens instead of repeating the password login. Treat this token store as
+sensitive; it is not part of the Git repository.
+
+If Garmin responds with HTTP 429, the app waits before trying again: the first
+rate-limit retry is after one hour, then delays double up to 24 hours. The manual
+refresh button respects that cooldown, and the retry state survives pod restarts.
+Repeated clicks do not repeat login attempts. Change the interval with:
 
 ```
 POLL_INTERVAL_MINUTES=10
