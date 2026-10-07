@@ -848,6 +848,17 @@ table.seasons tr:hover td { background: var(--paper-dim); }
   margin: 0 0 8px;
 }
 .fact-card__body { font-size: 15px; color: var(--ink); margin: 0; }
+.fact-card__source {
+  display: inline-block;
+  margin-top: 14px;
+  color: var(--red-deep);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1.5;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.fact-card__source:hover { color: var(--red); }
 .fact-card--featured {
   margin-top: 18px;
   max-width: 640px;

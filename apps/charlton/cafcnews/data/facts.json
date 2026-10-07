@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-07-17",
+  "lastUpdated": "2026-10-07",
   "categories": [
     {
       "name": "Origins",
@@ -98,6 +98,82 @@
           "title": "14,838 votes — and the council backed down",
           "body": "The Valley Party won no seats, but took 10.9% of the vote across Greenwich, enough to force the council back to the negotiating table. Charlton finally returned to The Valley on 5 December 1992, beating Portsmouth 1-0 in front of 8,337 emotional fans.",
           "year": "1992"
+        }
+      ]
+    },
+    {
+      "name": "The Valley and the Addicks",
+      "facts": [
+        {
+          "title": "The Valley began as a chalk pit",
+          "body": "The ground grew out of an abandoned sand and chalk pit known locally as “the swamp”. Early supporters helped dig out the playing area and used the spoil to build makeshift banks for spectators.",
+          "year": "1910s",
+          "source": { "label": "Charlton Athletic: The story of The Valley", "url": "https://www.cafc.co.uk/news/view/5caf45ff19c97/valley100-the-story-of-charltons-famous-home" }
+        },
+        {
+          "title": "The Valley’s first match was an ‘A’ team game",
+          "body": "The ground officially opened as the club’s home on 13 September 1919. Charlton’s ‘A’ team marked the occasion with a 2-0 win over Summerstown in the South Suburban League.",
+          "year": "1919",
+          "source": { "label": "Charlton Athletic: The story of The Valley", "url": "https://www.cafc.co.uk/news/view/5caf45ff19c97/valley100-the-story-of-charltons-famous-home" }
+        },
+        {
+          "title": "The first grandstand cost £14,000",
+          "body": "The Valley’s first grandstand, which also included dressing rooms, was completed in 1922. Its distinctive multi-span roof remained until it was replaced in 1979.",
+          "year": "1922",
+          "source": { "label": "Charlton Athletic: The story of The Valley", "url": "https://www.cafc.co.uk/news/view/5caf45ff19c97/valley100-the-story-of-charltons-famous-home" }
+        },
+        {
+          "title": "The Covered End got its roof during the rise to the top flight",
+          "body": "After Jimmy Seed became manager in 1933, Charlton climbed through the divisions. Around that time the north-end terrace became the Covered End, with a roof added to shelter supporters.",
+          "year": "1930s",
+          "source": { "label": "Charlton Athletic: The story of The Valley", "url": "https://www.cafc.co.uk/news/view/5caf45ff19c97/valley100-the-story-of-charltons-famous-home" }
+        },
+        {
+          "title": "The Valley hosted two enormous Who concerts",
+          "body": "The Who played two concerts at The Valley in the 1970s, with crowds reported at more than 76,000. The 1976 show was recorded at 120 decibels from 50 metres away and entered the Guinness Book of Records as the loudest gig at the time.",
+          "year": "1970s",
+          "source": { "label": "Charlton Athletic: The story of The Valley", "url": "https://www.cafc.co.uk/news/view/5caf45ff19c97/valley100-the-story-of-charltons-famous-home" }
+        },
+        {
+          "title": "The last match before the Valley exile ended 2-0",
+          "body": "Charlton’s final match at The Valley before leaving in 1985 was against Stoke City. The Addicks won 2-0, two weeks after supporters had first been told the club would move to Selhurst Park.",
+          "year": "1985",
+          "source": { "label": "Charlton Athletic: The story of The Valley", "url": "https://www.cafc.co.uk/news/view/5caf45ff19c97/valley100-the-story-of-charltons-famous-home" }
+        },
+        {
+          "title": "Colin Walsh scored the first goal after the return home",
+          "body": "Charlton returned to The Valley on 5 December 1992 after seven years away. Colin Walsh scored the first goal back in SE7 in a 1-0 victory over Portsmouth.",
+          "year": "1992",
+          "source": { "label": "Charlton Athletic: The story of The Valley", "url": "https://www.cafc.co.uk/news/view/5caf45ff19c97/valley100-the-story-of-charltons-famous-home" }
+        },
+        {
+          "title": "Charlton joined the Football League before The Valley had a stand",
+          "body": "Charlton were elected to the Football League in 1921. The club’s history of The Valley notes that the ground still had no stand at that point; the first grandstand followed in 1922.",
+          "year": "1921",
+          "source": { "label": "Charlton Athletic: The story of The Valley", "url": "https://www.cafc.co.uk/news/view/5caf45ff19c97/valley100-the-story-of-charltons-famous-home" }
+        }
+      ]
+    },
+    {
+      "name": "Addicks milestones",
+      "facts": [
+        {
+          "title": "Charlton Women lifted the FA Cup in 2005",
+          "body": "Charlton Athletic Women beat Everton 1-0 in the 2005 FA Women’s Cup final. Eniola Aluko scored the winner; Casey Stoney captained the side and Keith Boanas was manager.",
+          "year": "2005",
+          "source": { "label": "Charlton Athletic: 20 years on from the Women’s FA Cup triumph", "url": "https://www.cafc.co.uk/news/20-years-celebrating-charlton-womens-historic-fa-cup-triumph" }
+        },
+        {
+          "title": "Three Women’s FA Cup finals in four years",
+          "body": "Charlton Women reached three FA Cup finals in a four-year span during a golden period for the team. Their 2005 win over Everton was the high point of that run.",
+          "year": "2001–05",
+          "source": { "label": "Charlton Athletic: 20 years on from the Women’s FA Cup triumph", "url": "https://www.cafc.co.uk/news/20-years-celebrating-charlton-womens-historic-fa-cup-triumph" }
+        },
+        {
+          "title": "Charlton’s 101-point season is among the EFL’s best",
+          "body": "Charlton won League One in 2011-12 with 101 points. The EFL lists that total among the highest points tallies achieved in a Football League season using three points for a win.",
+          "year": "2011–12",
+          "source": { "label": "EFL records: most points in a season", "url": "https://www.efl.com/about-the-efl/history/records/" }
         }
       ]
     }

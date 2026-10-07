@@ -23,6 +23,7 @@
             <span class="fact-card__year"><%= f.year %></span>
             <h3 class="fact-card__title"><%= f.title %></h3>
             <p class="fact-card__body"><%= f.body %></p>
+            <% if (f.source) { %><a class="fact-card__source" href="<%= f.source.url %>" target="_blank" rel="noopener noreferrer">Source: <%= f.source.label %> ↗</a><% } %>
           </div>
         <% }) %>
       </div>
@@ -38,11 +39,26 @@
     btn.addEventListener('click', () => {
       const f = facts[Math.floor(Math.random() * facts.length)];
       card.hidden = false;
-      card.innerHTML = `
-        <span class="fact-card__year">${f.year} &middot; ${f.category}</span>
-        <h3 class="fact-card__title">${f.title}</h3>
-        <p class="fact-card__body">${f.body}</p>
-      `;
+      card.replaceChildren();
+      const year = document.createElement('span');
+      year.className = 'fact-card__year';
+      year.textContent = `${f.year} · ${f.category}`;
+      const title = document.createElement('h3');
+      title.className = 'fact-card__title';
+      title.textContent = f.title;
+      const body = document.createElement('p');
+      body.className = 'fact-card__body';
+      body.textContent = f.body;
+      card.append(year, title, body);
+      if (f.source) {
+        const source = document.createElement('a');
+        source.className = 'fact-card__source';
+        source.href = f.source.url;
+        source.target = '_blank';
+        source.rel = 'noopener noreferrer';
+        source.textContent = `Source: ${f.source.label} ↗`;
+        card.append(source);
+      }
       card.classList.remove('is-pulsing');
       void card.offsetWidth;
       card.classList.add('is-pulsing');
