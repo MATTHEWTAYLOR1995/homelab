@@ -113,10 +113,6 @@
   const homeBtn = document.getElementById('refreshLatestMovesBtn');
   if (!pageBtn && !homeBtn) return;
 
-  function noteFor(t) {
-    const note = (t.note || '').trim();
-    return /^Imported from (Transfermarkt|BeSoccer)/i.test(note) ? '' : note;
-  }
   function detailsFor(t, clubLabel, club) {
     return [club ? `${clubLabel} <strong>${club}</strong>` : '', t.date || '', t.window || ''].filter(Boolean).join(' &middot; ');
   }
@@ -132,7 +128,6 @@
           </div>
           ${t.fee ? `<div class="ticket__fee">${t.fee}</div>` : ''}
         </div>
-        ${noteFor(t) ? `<p class="ticket__note">${noteFor(t)}</p>` : ''}
       </div>
     `;
   }
@@ -148,7 +143,6 @@
           </div>
           ${t.fee ? `<div class="ticket__fee">${t.fee}</div>` : ''}
         </div>
-        ${noteFor(t) ? `<p class="ticket__note">${noteFor(t)}</p>` : ''}
       </div>
     `;
   }

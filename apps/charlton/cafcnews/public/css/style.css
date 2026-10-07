@@ -6,15 +6,15 @@
 :root {
   --red: #D2122E;
   --red-deep: #A30E24;
-  --brick: #7A3B2E;
-  --charcoal: #1B1B1D;
-  --charcoal-soft: #2B2A28;
-  --paper: #F5F2EC;
-  --paper-dim: #EAE5D9;
-  --line: #DAD3C5;
-  --gold: #C9A24B;
-  --ink: #201F1D;
-  --ink-soft: #55524C;
+  --brick: #252529;
+  --charcoal: #101013;
+  --charcoal-soft: #202024;
+  --paper: #FFFFFF;
+  --paper-dim: #F3F3F5;
+  --line: #E1E1E5;
+  --accent: #D2122E;
+  --ink: #17171A;
+  --ink-soft: #55555D;
   --white: #FFFFFF;
 
   --font-display: 'Anton', 'Oswald', sans-serif;
@@ -71,8 +71,8 @@ a { color: inherit; }
   background: repeating-linear-gradient(
     calc(90deg - var(--lean)),
     var(--red) 0px, var(--red) 18px,
-    var(--gold) 18px, var(--gold) 22px,
-    var(--red) 22px, var(--red) 40px
+    var(--white) 18px, var(--white) 22px,
+    var(--charcoal) 22px, var(--charcoal) 40px
   );
 }
 .masthead__inner {
@@ -137,7 +137,7 @@ a { color: inherit; }
 .masthead__nav a.is-active { background: var(--red); color: var(--white); }
 .masthead__nav a:focus-visible,
 a:focus-visible, button:focus-visible, select:focus-visible {
-  outline: 3px solid var(--gold);
+  outline: 3px solid var(--accent);
   outline-offset: 2px;
 }
 
@@ -233,7 +233,7 @@ h2.section-title::after {
   font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 0.14em;
-  color: var(--gold);
+  color: var(--accent);
   margin-bottom: 14px;
 }
 .hero h1 {
@@ -265,7 +265,7 @@ h2.section-title::after {
 .btn--primary { background: var(--red); color: var(--white); }
 .btn--primary:hover { background: var(--red-deep); }
 .btn--ghost { border-color: rgba(255,255,255,0.35); color: var(--paper); }
-.btn--ghost:hover { border-color: var(--gold); color: var(--gold); }
+.btn--ghost:hover { border-color: var(--accent); color: var(--accent); }
 
 /* current-season strip */
 .snapshot {
@@ -368,9 +368,9 @@ h2.section-title::after {
 .ticket--stacked .ticket__top { display: flex; align-items: center; gap: 14px; }
 
 .window-note {
-  background: #FBF6E9;
-  border: 1px solid #E9DCAE;
-  color: #6B5417;
+  background: #FFF1F3;
+  border: 1px solid #F0B9C2;
+  color: var(--red-deep);
   padding: 14px 16px;
   border-radius: 4px;
   font-size: 15px;
@@ -481,7 +481,7 @@ h2.section-title::after {
   font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: var(--gold);
+  color: var(--accent);
   margin-bottom: 12px;
 }
 .next-fixture__match {
@@ -497,7 +497,7 @@ h2.section-title::after {
 .next-fixture__vs {
   font-family: var(--font-mono);
   font-size: 14px;
-  color: var(--gold);
+  color: var(--accent);
   text-transform: uppercase;
 }
 .next-fixture__meta {
@@ -665,7 +665,7 @@ h2.section-title::after {
   flex-shrink: 0;
 }
 .news-item__badge--confirmed { background: rgba(46,125,50,0.12); color: #2E7D32; }
-.news-item__badge--rumour { background: rgba(201,162,75,0.2); color: #7A5F1C; }
+.news-item__badge--rumour { background: rgba(210,18,46,0.1); color: var(--red-deep); }
 .news-item__badge--unclear { background: var(--paper-dim); color: var(--ink-soft); }
 .news-item__title { flex: 1; min-width: 0; }
 .news-item__meta {
@@ -775,7 +775,7 @@ table.seasons tr:hover td { background: var(--paper-dim); }
 }
 .tag--up { background: rgba(46,125,50,0.12); color: #2E7D32; }
 .tag--down { background: rgba(210,18,46,0.1); color: var(--red-deep); }
-.tag--cup { background: rgba(201,162,75,0.2); color: #7A5F1C; }
+.tag--cup { background: rgba(210,18,46,0.1); color: var(--red-deep); }
 .tag--champ { background: rgba(27,27,29,0.08); color: var(--charcoal); }
 .pos-cell { font-family: var(--font-mono); }
 .division-cell { color: var(--ink-soft); }
@@ -862,14 +862,14 @@ table.seasons tr:hover td { background: var(--paper-dim); }
 .fact-card--featured {
   margin-top: 18px;
   max-width: 640px;
-  border: 1px solid var(--gold);
-  background: #FBF6E9;
+  border: 1px solid var(--red);
+  background: #FFF5F6;
 }
-.fact-card--featured .fact-card__year { color: #7A5F1C; }
+.fact-card--featured .fact-card__year { color: var(--red-deep); }
 .fact-card.is-pulsing { animation: factPulse 0.5s ease; }
 @keyframes factPulse {
-  0% { transform: scale(0.98); box-shadow: 0 0 0 0 rgba(201,162,75,0.4); }
-  100% { transform: scale(1); box-shadow: 0 0 0 8px rgba(201,162,75,0); }
+  0% { transform: scale(0.98); box-shadow: 0 0 0 0 rgba(210,18,46,0.24); }
+  100% { transform: scale(1); box-shadow: 0 0 0 8px rgba(210,18,46,0); }
 }
 
 /* ---------- reveal-on-scroll (used across pages) ---------- */
@@ -916,20 +916,20 @@ table.seasons tr:hover td { background: var(--paper-dim); }
 .story__bg--origins {
   background:
     radial-gradient(ellipse at 30% 20%, rgba(255,255,255,0.15), transparent 60%),
-    linear-gradient(160deg, #E9DCB9 0%, #C9A24B 45%, #8C6A2E 100%);
+    linear-gradient(160deg, #29292E 0%, #17171B 55%, #7A1424 100%);
 }
 .story__bg--origins::after { content:''; position:absolute; inset:0; background-image: repeating-radial-gradient(circle at 0 0, transparent 0, transparent 3px, rgba(0,0,0,0.04) 4px); }
 
 .story__bg--rise {
   background:
     repeating-linear-gradient(56deg, rgba(255,255,255,0.06) 0 2px, transparent 2px 26px),
-    radial-gradient(circle at 70% 30%, rgba(201,162,75,0.5), transparent 55%),
+    radial-gradient(circle at 70% 30%, rgba(210,18,46,0.5), transparent 55%),
     linear-gradient(160deg, #3A0E16 0%, #7A1424 50%, #A30E24 100%);
 }
 
 .story__bg--crowd {
   background:
-    repeating-linear-gradient(90deg, #D2122E 0 10px, #F5F2EC 10px 20px),
+    repeating-linear-gradient(90deg, #D2122E 0 10px, #FFFFFF 10px 20px),
     linear-gradient(#1B1B1D, #1B1B1D);
   background-blend-mode: normal;
 }
@@ -946,8 +946,8 @@ table.seasons tr:hover td { background: var(--paper-dim); }
 
 .story__bg--cup {
   background:
-    radial-gradient(circle at 50% 35%, rgba(255,236,180,0.9), rgba(201,162,75,0.55) 40%, transparent 70%),
-    linear-gradient(160deg, #1B1B1D 0%, #3A2C10 60%, #7A5F1C 100%);
+    radial-gradient(circle at 50% 35%, rgba(255,255,255,0.9), rgba(210,18,46,0.55) 40%, transparent 70%),
+    linear-gradient(160deg, #101013 0%, #29292E 60%, #7A1424 100%);
 }
 
 .story__bg--wilderness {
@@ -959,13 +959,13 @@ table.seasons tr:hover td { background: var(--paper-dim); }
 .story__bg--return {
   background:
     radial-gradient(circle at 50% 55%, rgba(255,255,255,0.25), transparent 45%),
-    repeating-linear-gradient(56deg, rgba(201,162,75,0.15) 0 2px, transparent 2px 30px),
+    repeating-linear-gradient(56deg, rgba(255,255,255,0.15) 0 2px, transparent 2px 30px),
     linear-gradient(160deg, #A30E24 0%, #D2122E 55%, #7A1424 100%);
 }
 
 .story__bg--today {
   background:
-    repeating-linear-gradient(calc(90deg - 34deg), rgba(210,18,46,0.55) 0 16px, rgba(201,162,75,0.5) 16px 20px, transparent 20px 40px),
+    repeating-linear-gradient(calc(90deg - 34deg), rgba(210,18,46,0.7) 0 16px, rgba(255,255,255,0.55) 16px 20px, transparent 20px 40px),
     linear-gradient(160deg, #1B1B1D 0%, #101011 100%);
 }
 
@@ -985,7 +985,7 @@ table.seasons tr:hover td { background: var(--paper-dim); }
   font-size: 13px;
   text-transform: uppercase;
   letter-spacing: 0.14em;
-  color: var(--gold);
+  color: var(--accent);
   opacity: 0;
   transition: opacity 0.5s ease;
   position: absolute;
@@ -1040,7 +1040,7 @@ table.seasons tr:hover td { background: var(--paper-dim); }
 .story__panel-year {
   font-family: var(--font-mono);
   font-size: 12px;
-  color: var(--gold);
+  color: var(--accent);
   text-transform: uppercase;
   letter-spacing: 0.1em;
   margin-bottom: 8px;

@@ -28,7 +28,6 @@
             </div>
             <% if (t.fee) { %><div class="ticket__fee"><%= t.fee %></div><% } %>
           </div>
-          <% if (t.note && !/^Imported from (Transfermarkt|BeSoccer)/i.test(t.note)) { %><p class="ticket__note"><%= t.note %></p><% } %>
         </div>
       <% }) %>
     </div>
@@ -45,7 +44,6 @@
             </div>
             <% if (t.fee) { %><div class="ticket__fee"><%= t.fee %></div><% } %>
           </div>
-          <% if (t.note && !/^Imported from (Transfermarkt|BeSoccer)/i.test(t.note)) { %><p class="ticket__note"><%= t.note %></p><% } %>
         </div>
       <% }) %>
     </div>
@@ -54,7 +52,7 @@
       <h2 class="section-title">Contract news</h2>
       <div class="card-list">
         <% data.extended.forEach(e => { %>
-          <div class="ticket" style="border-left:5px solid var(--gold);">
+          <div class="ticket" style="border-left:5px solid var(--accent);">
             <div class="ticket__body">
               <div class="ticket__player"><%= e.player %></div>
               <div class="ticket__meta"><%= e.type %> &middot; <%= e.date %></div>
