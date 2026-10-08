@@ -1,0 +1,79 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: home-assistant
+  namespace: home-assistant
+spec:
+  # One replica on purpose: Home Assistant keeps its state in a SQLite database and
+  # JSON files on /config, which only one instance can use at a time.
+  # Recreate (not RollingUpdate) so the old pod is gone before the new one mounts
+  # the volume.
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: home-assistant
+  template:
+    metadata:
+      labels:
+        app: home-assistant
+    spec:
+      automountServiceAccountToken: false
+      initContainers:
+        - name: seed-config
+          image: ghcr.io/home-assistant
+          command:
+            - sh
+            - -c
+            - |
+              test -f /config/configuration.yaml || cp /seed/configuration.yaml /config/configuration.yaml
+              for f in automations scripts scenes; do test -f /config/$f.yaml || touch /config/$f.yaml; done
+          volumeMounts:
+            - name: data
+              mountPath: /config
+            - name: seed
+              mountPath: /seed
+              readOnly: true
+      containers:
+        - name: web
+          image: ghcr.io/home-assistant
+          ports:
+            - containerPort: 8123
+          env:
+            - name: TZ
+              value: Europe/London
+          volumeMounts:
+            - name: data
+              mountPath: /config
+          # First boot downloads and sets up integrations, which can take minutes.
+          startupProbe:
+            httpGet:
+              path: /
+              port: 8123
+            periodSeconds: 10
+            failureThreshold: 60
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8123
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8123
+            periodSeconds: 20
+            timeoutSeconds: 5
+          resources:
+            requests:
+              cpu: 100m
+              memory: 512Mi
+            limits:
+              memory: 2Gi
+      volumes:
+        - name: seed
+          configMap:
+            name: home-assistant-seed
+        - name: data
+          persistentVolumeClaim:
+            claimName: home-assistant-data
