@@ -5,7 +5,7 @@ metadata:
 spec:
   ingressClassName: traefik
   rules:
-    - host: home-assistant.localhost
+    - host: home.localhost
       http:
         paths:
           - path: /
