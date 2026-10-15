@@ -7,7 +7,7 @@
 <body>
 <header class="hero">
   <div class="topline"><span class="mark">FF</span><span>HOMELAB · PRICE WATCH</span></div>
-  <div class="hero-content"><div><p class="eyebrow">THE ZERO & DIET DRINKS RADAR</p><h1>Find your fizz<br><em>for less.</em></h1><p class="lede">A single view of low-sugar multipacks and member deals across the UK shops you use.</p></div>
+  <div class="hero-content"><div><p class="eyebrow">THE ZERO & DIET DRINKS RADAR</p><h1>Drinks...<br><em>Where you at?</em></h1><p class="lede">A single view of low-sugar multipacks and member deals across the UK shops you use.</p></div>
   <form method="post" action="{{ url_for('refresh') }}"><button class="refresh" {% if scanning %}disabled{% endif %}>{% if scanning %}<span class="spinner"></span> Scanning shops…{% else %}↻ Scan now{% endif %}</button></form></div>
   <div class="shop-strip"><span>WATCHING</span>{% for name in ["Amazon","Asda","Iceland","Sainsbury's","Waitrose","Tesco"] %}<b>{{ name }}</b>{% endfor %}</div>
 </header>
