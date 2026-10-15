@@ -1,4 +1,4 @@
-# Fizz Finder (Drink Deals)
+# Can Finder (Drink Deals)
 
 A lightweight homelab app that checks public product pages for diet/zero-sugar multipacks and shows current pack prices, member prices when exposed, detected multibuys, and price per can. It scans Amazon UK, Asda, Iceland, Sainsbury's, Waitrose, and Tesco.
 
