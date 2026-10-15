@@ -9,15 +9,17 @@ flowchart LR
   docker["Docker Desktop<br/>(start manually)"] --> k3d["k3d: homelab cluster"]
   k3d --> traefik["Traefik ingress<br/>host port 8080"]
   browser["Browser on PC"] -->|app.localhost:8080| traefik
-  phone["Phone / other LAN device<br/>main home Wi-Fi"] -->|HTTP :3001 Charlton<br/>HTTP :3002 Garmin<br/>HTTPS :3003 Argo CD| proxy["Nginx LAN proxy"]
+  phone["Phone / other LAN device<br/>main home Wi-Fi"] -->|HTTP :3001 Charlton<br/>HTTP :3002 Garmin<br/>HTTPS :3003 Argo CD<br/>HTTP :3005 Drink Deals| proxy["Nginx LAN proxy"]
   proxy -->|host-based routing via :8080| traefik
   traefik -->|argocd.localhost| argocdUI["Argo CD UI<br/>Ingress → Service → Pod"]
 
   github["GitHub homelab repo<br/>main branch"] -->|manifests| argocd["Argo CD"]
   argocd -->|syncs| charlton["Charlton<br/>Ingress → Service → Pod"]
   argocd -->|syncs| garmin["Garmin<br/>Ingress → Service → Pod"]
+  argocd -->|syncs| deals["Drink Deals<br/>Ingress → Service → Pod"]
   traefik -->|charlton.localhost| charlton
   traefik -->|garmin.localhost| garmin
+  traefik -->|deals.localhost| deals
 
   sealed["Encrypted SealedSecret<br/>in Git"] --> controller["Sealed Secrets controller"]
   controller -->|decrypts| secret["Kubernetes Secret"]
@@ -55,6 +57,7 @@ The k3d load balancer publishes Traefik ingress on host port `8080`:
 
 - Charlton: <http://charlton.localhost:8080>
 - Garmin: <http://garmin.localhost:8080>
+- Drink Deals: <http://deals.localhost:8080>
 
 ## Access from a phone or other device on your home LAN
 
@@ -63,6 +66,7 @@ You can open the apps from a phone, tablet, or another computer without setting 
 - Charlton: <http://192.168.1.109:3001>
 - Garmin: <http://192.168.1.109:3002>
 - Argo CD: <https://192.168.1.109:3003> (self-signed certificate; see Argo CD section below)
+- Drink Deals: <http://192.168.1.109:3005>
 
 The small Nginx proxy listens on those ports and forwards each request to the existing Traefik ingress with the hostname that app expects. Before using the links, Docker Desktop must be running and the `homelab` k3d cluster must be up. Start the proxy once from the repository root if it is not already running:
 
@@ -73,7 +77,7 @@ docker compose -f .\compose.lan.yml up -d
 The proxy uses Docker's `unless-stopped` restart policy, so it starts again when Docker Desktop starts. If a link times out, check that the proxy container is running with `docker ps --filter name=homelab-lan-proxy`. If Windows Firewall is blocking the connection, add this inbound rule in an Administrator PowerShell:
 
 ```powershell
-New-NetFirewallRule -DisplayName "Homelab LAN sites" -Direction Inbound -Action Allow -Protocol TCP -LocalPort "3001-3003" -RemoteAddress "192.168.1.0/24" -Profile Public
+New-NetFirewallRule -DisplayName "Homelab LAN sites" -Direction Inbound -Action Allow -Protocol TCP -LocalPort "3001-3005" -RemoteAddress "192.168.1.0/24" -Profile Public
 ```
 
 Charlton and Garmin use HTTP; Argo CD uses HTTPS with the local self-signed certificate. Do not create a router port-forward for these ports. If the PC's static IP changes, update the address in `compose.lan.yml`, the upstream addresses in `lan-proxy/nginx.conf`, the certificate SAN, and the links above.
@@ -133,7 +137,7 @@ To register an app with Argo CD for the first time, apply its Application manife
 kubectl apply -f .\argocd\garmin.yaml
 ```
 
-The Application manifest points Argo CD at `apps/garmin`. The `apps/<name>/kustomization.yaml` file lists the Kubernetes resources for that app.
+The Application manifest points Argo CD at `apps/garmin`. The `apps/<name>/kustomization.yaml` file lists the Kubernetes resources for that app. Drink Deals is registered with `kubectl apply -f .\argocd\drink-deals.yaml`; it scans public product data every 12 hours and keeps its database on a PVC. Member prices are shown only when public retailer pages expose them. Open it at <http://deals.localhost:8080> on the PC or <http://192.168.1.109:3005> from a LAN device. See `apps/drink-deals/README.md` for its scanner behavior and limitations.
 
 `apps/garmin/sealed-secret.yaml` contains encrypted SealedSecret data and is intentionally allowed through the `.gitignore` rule. Commit only this encrypted manifest, never plaintext credentials. The Sealed Secrets controller creates the regular `garmin-secrets` Secret inside the cluster.
 

@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: drink-deals
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: drink-deals
+  template:
+    metadata:
+      labels:
+        app: drink-deals
+    spec:
+      automountServiceAccountToken: false
+      containers:
+        - name: web
+          image: ghcr.io/matthewtaylor1995/drink-deals
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 5000
+          env:
+            - name: PORT
+              value: "5000"
+            - name: DATA_DIR
+              value: /data
+            - name: SCAN_INTERVAL_HOURS
+              value: "12"
+          volumeMounts:
+            - name: data
+              mountPath: /data
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            initialDelaySeconds: 20
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: 25m
+              memory: 128Mi
+            limits:
+              memory: 512Mi
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: drink-deals-data

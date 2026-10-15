@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: drink-deals
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/matthewtaylor1995/homelab.git
+    targetRevision: main
+    path: apps/drink-deals
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: drink-deals
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Fizz Finder · Homelab</title><link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<header class="hero">
+  <div class="topline"><span class="mark">FF</span><span>HOMELAB · PRICE WATCH</span></div>
+  <div class="hero-content"><div><p class="eyebrow">THE ZERO & DIET DRINKS RADAR</p><h1>Find your fizz<br><em>for less.</em></h1><p class="lede">A single view of low-sugar multipacks and member deals across the UK shops you use.</p></div>
+  <form method="post" action="{{ url_for('refresh') }}"><button class="refresh" {% if scanning %}disabled{% endif %}>{% if scanning %}<span class="spinner"></span> Scanning shops…{% else %}↻ Scan now{% endif %}</button></form></div>
+  <div class="shop-strip"><span>WATCHING</span>{% for name in ["Amazon","Asda","Iceland","Sainsbury's","Waitrose","Tesco"] %}<b>{{ name }}</b>{% endfor %}</div>
+</header>
+<main>
+  <section class="intro"><div><p class="eyebrow">LIVE DEAL BOARD</p><h2>What’s worth stocking up on?</h2><p>Ranked by price per can when the pack size is available. Member-only prices are shown separately.</p></div><span class="update">AUTO-SCANS EVERY {{ interval }}H</span></section>
+  {% if deals %}<section class="deal-grid">
+    {% for d in deals %}<article class="deal-card">
+      <div class="card-head"><span class="retailer">{{ d.retailer }}</span><span class="pack">{% if d.pack_count %}{{ d.pack_count }} cans{% else %}Pack size unknown{% endif %}</span></div>
+      <h3>{{ d.title }}</h3>
+      <div class="price-line"><span class="price">{% if d.price %}£{{ '%.2f'|format(d.price) }}{% else %}—{% endif %}</span><span class="per">{% if d.price and d.pack_count %}£{{ '%.3f'|format(d.price / d.pack_count) }} / can{% endif %}</span></div>
+      {% if d.member_price %}<div class="member"><span>MEMBER PRICE</span><strong>£{{ '%.2f'|format(d.member_price) }}</strong>{% if d.pack_count %}<small>£{{ '%.3f'|format(d.member_price / d.pack_count) }} / can</small>{% endif %}<small>{{ d.member_label or 'Member offer' }}</small></div>{% endif %}
+      {% if d.promotion %}<p class="promo">{{ d.promotion }}{% if d.bundle_total and d.bundle_quantity %}<strong> · {{ d.bundle_quantity }} packs for £{{ '%.2f'|format(d.bundle_total) }}</strong>{% if d.pack_count %}<br>Bundle price: £{{ '%.3f'|format(d.bundle_total / (d.bundle_quantity * d.pack_count)) }} / can{% endif %}{% endif %}</p>{% endif %}
+      <footer><span>Checked {{ d.checked_at[:16].replace('T',' ') }} UTC</span><a href="{{ d.url }}" target="_blank" rel="noreferrer">View at {{ d.retailer }} ↗</a></footer>
+    </article>{% endfor %}
+  </section>{% else %}<section class="empty"><div class="empty-icon">↗</div><h3>{% if scanning %}First scan is underway{% else %}No prices collected yet{% endif %}</h3><p>Retailer pages are scanned gently for public product price data. Some stores may block automated requests or require a delivery postcode; those limitations will appear below.</p>{% if not scanning %}<form method="post" action="{{ url_for('refresh') }}"><button class="refresh dark">Start first scan</button></form>{% endif %}</section>{% endif %}
+  <section class="status"><div><p class="eyebrow">SOURCE STATUS</p><h2>Retailer checks</h2></div><div class="status-list">{% for s in scans %}<div class="status-row"><span class="status-dot {{ s.status }}"></span><b>{{ s.retailer }}</b><span>{{ s.message }}</span><time>{{ s.checked_at[:16].replace('T',' ') }} UTC</time></div>{% else %}<p>Waiting for first scan…</p>{% endfor %}</div></section>
+  <aside class="note"><b>Price check, not checkout guarantee.</b> Prices and availability may vary by postcode, delivery slot, loyalty account and time. Nectar personal offers and account-only deals may not appear in public pages. Always confirm the final price at the retailer. Failed scans are shown as unavailable rather than treated as current prices.</aside>
+</main><script>setTimeout(()=>location.reload(),60000)</script>
+</body></html>

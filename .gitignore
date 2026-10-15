@@ -5,3 +5,4 @@
 node_modules/
 lan-proxy/certs/
 !apps/garmin/sealed-secret.yaml
+/apps/drink-deals/data/

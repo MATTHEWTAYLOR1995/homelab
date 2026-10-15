@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: drink-deals
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: deals.localhost
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: drink-deals
+                port:
+                  number: 80
